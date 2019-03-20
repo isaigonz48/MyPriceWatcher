@@ -21,6 +21,7 @@ public class Item {
     private double currentPrice;
     private double initialPrice;
     private String URL;
+    private double percentageOff;
 
     /**
      * Default Constructor
@@ -43,6 +44,7 @@ public class Item {
         this.initialPrice = i;
         this.currentPrice = this.initialPrice;
         this.URL = url;
+        this.percentageOff = calcPercentageOff();
     }
 
     public String getName(){
@@ -57,6 +59,9 @@ public class Item {
     public String getUrl(){
         return this.URL;
     }
+    public double getPercentageOff(){
+        return this.percentageOff;
+    }
 
     public void setName(String newName){
         this.name = newName;
@@ -66,6 +71,9 @@ public class Item {
     }
     public void setURL(String newUrl){
         this.URL = newUrl;
+    }
+    public void setPercentageOff(){
+        this.percentageOff = calcPercentageOff();
     }
 
     /**

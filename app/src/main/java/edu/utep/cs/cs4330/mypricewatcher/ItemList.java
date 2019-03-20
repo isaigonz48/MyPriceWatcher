@@ -3,25 +3,17 @@ package edu.utep.cs.cs4330.mypricewatcher;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ItemList {
-    private static ItemList listInstance = null;
-    private static List<Item> items;
+public class ItemList extends ArrayList<Item>{
+    //private static ItemList listInstance = null;
+    //private static ItemList items;
 
-
-    private ItemList(){
-        items = new ArrayList<>();
+    public void findNewPrices(){
+        for(int i = 0; i < this.size(); i++){
+            Item item = this.get(i);
+            item.findNewPrice();
+            item.setPercentageOff();
+        }
     }
 
-    public static ItemList getInstance(){
-        if(listInstance == null)
-            listInstance = new ItemList();
-        return listInstance;
-    }
-
-    public List<Item> getList(){
-        if(listInstance == null)
-            listInstance = new ItemList();
-        return listInstance.getList();
-    }
 
 }

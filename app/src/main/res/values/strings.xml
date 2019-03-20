@@ -3,4 +3,8 @@
     <string name="visit_website">Visit Website</string>
     <string name="refresh">Refresh</string>
     <string name="broom">Broom</string>
+    <string name="Remove">Remove</string>
+    <string name="Edit">Edit</string>
+    <string name="Add">Add</string>
+    <string name="AddItem">Add Item</string>
 </resources>

@@ -29,15 +29,17 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.PopupMenu;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
 public class MainActivity extends AppCompatActivity {
 
     private Button refreshButton;
     private Button addButton;
+    private Button sortButton;
     private static ItemList wishList;
     private ItemListAdapter itemAdapter;
-    private PopupMenu addEditMenu;
+    private PopupMenu sortMenu;
 
     private class ItemListAdapter extends ArrayAdapter<Item> {
 
@@ -73,8 +75,6 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(i);
             });
 
-
-
             Button editButton = itemView.findViewById(R.id.editButton);
             editButton.setOnClickListener(view ->{
                 Intent i = new Intent(this.context, addEditItemActivity.class);
@@ -88,6 +88,7 @@ public class MainActivity extends AppCompatActivity {
             removeButton.setOnClickListener(view ->{
                 wishList.remove(item);
                 this.notifyDataSetChanged();
+                Toast.makeText(this.context, "Item removed!", Toast.LENGTH_SHORT).show();
             });
 
             itemView.setOnClickListener(view ->{
@@ -107,8 +108,15 @@ public class MainActivity extends AppCompatActivity {
         if(requestCode == 1 && resultCode == RESULT_OK){
             String resultString = result.getData().toString();
 
-            if(resultString.equals("LIST_CHANGE")){
+            if(resultString.equals("ITEM_EDIT")){
                 itemAdapter.notifyDataSetChanged();
+                Toast.makeText(this, "Item changed!", Toast.LENGTH_SHORT).show();
+            }else if(resultString.equals("ITEM_ADD")){
+                itemAdapter.notifyDataSetChanged();
+                Toast.makeText(this, "Item added!", Toast.LENGTH_SHORT).show();
+            }else if(resultString.equals("ITEM_REMOVE")){
+                itemAdapter.notifyDataSetChanged();
+                Toast.makeText(this, "Item removed!", Toast.LENGTH_SHORT).show();
             }
         }
     }
@@ -123,6 +131,8 @@ public class MainActivity extends AppCompatActivity {
 
         refreshButton = findViewById(R.id.refreshButton);
         addButton = findViewById(R.id.addButton);
+        sortButton = findViewById(R.id.sortButton);
+
         wishList = ItemList.getInstance();
 
         ListView listview = findViewById(R.id.itemList);
@@ -163,6 +173,32 @@ public class MainActivity extends AppCompatActivity {
             i.putExtra("adding", true);
             startActivityForResult(i,1);
         });
+
+        sortMenu = new PopupMenu(this,sortButton);
+        sortMenu.inflate(R.menu.sort_menu);
+        sortMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                switch (item.getItemId()){
+                    case R.id.sort_name:
+                        wishList.sortByName();
+                        itemAdapter.notifyDataSetChanged();
+                        return true;
+
+                    case R.id.sort_currentPrice:
+                        wishList.sortByCurrentPrice();
+                        itemAdapter.notifyDataSetChanged();
+                        return true;
+
+                    case R.id.sort_percentage:
+                        wishList.sortByPercentage();
+                        itemAdapter.notifyDataSetChanged();
+                }
+                return false;
+            }
+        });
+
+        sortButton.setOnClickListener(view -> sortMenu.show());
 
         ///// Gets the url that was shared and sets it as new url
         String action = getIntent().getAction();

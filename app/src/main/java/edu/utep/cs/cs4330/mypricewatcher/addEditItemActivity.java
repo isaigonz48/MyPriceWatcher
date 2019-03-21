@@ -8,6 +8,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 public class addEditItemActivity extends AppCompatActivity {
 
@@ -38,7 +39,7 @@ public class addEditItemActivity extends AppCompatActivity {
 
         list = ItemList.getInstance();
 
-        if(adding == false){
+        if(!adding){
             pos = i.getIntExtra("itemPosition", 0);
             editItem = list.get(pos);
 
@@ -88,13 +89,18 @@ public class addEditItemActivity extends AppCompatActivity {
         });
 
         confirmButton.setOnClickListener(view ->{
-            if(adding == true){
+
+            if(Double.parseDouble(curPrice.getText().toString()) <= 0 || Double.parseDouble(initPrice.getText().toString()) <= 0){
+                Toast.makeText(this, "Price cannot be 0!", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            if(adding){
                 Item newItem = new Item(itemName.getText().toString(), Double.parseDouble(initPrice.getText().toString()), itemUrl.getText().toString());
                 newItem.setCurPrice(Double.parseDouble(curPrice.getText().toString()));
                 list.add(newItem);
 
                 Intent result = new Intent();
-                result.setData(Uri.parse("LIST_CHANGE"));
+                result.setData(Uri.parse("ITEM_ADD"));
                 setResult(RESULT_OK, result);
                 finish();
             }else{
@@ -105,7 +111,7 @@ public class addEditItemActivity extends AppCompatActivity {
                 editItem.setURL(itemUrl.getText().toString());
 
                 Intent result = new Intent();
-                result.setData(Uri.parse("LIST_CHANGE"));
+                result.setData(Uri.parse("ITEM_EDIT"));
                 setResult(RESULT_OK, result);
                 finish();
             }

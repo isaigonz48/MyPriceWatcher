@@ -7,4 +7,8 @@
     <string name="Edit">Edit</string>
     <string name="Add">Add</string>
     <string name="AddItem">Add Item</string>
+    <string name="editName">Name:</string>
+    <string name="editInitial">Initial Price:</string>
+    <string name="editCurrent">Current Price:</string>
+    <string name="editUrl">URL:</string>
 </resources>

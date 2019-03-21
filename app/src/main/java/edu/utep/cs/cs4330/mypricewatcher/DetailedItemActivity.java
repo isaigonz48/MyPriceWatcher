@@ -54,7 +54,7 @@ public class DetailedItemActivity extends AppCompatActivity {
         });
         removeButton.setOnClickListener(view ->{
             Intent result = new Intent();
-            result.setData(Uri.parse("ITEM_DELETED"));
+            result.setData(Uri.parse("LIST_CHANGE"));
             setResult(RESULT_OK, result);
             list.remove(item);
             finish();

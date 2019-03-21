@@ -76,8 +76,12 @@ public class MainActivity extends AppCompatActivity {
 
 
             Button editButton = itemView.findViewById(R.id.editButton);
-                editButton.setOnClickListener(view ->{
+            editButton.setOnClickListener(view ->{
+                Intent i = new Intent(this.context, addEditItemActivity.class);
+                i.putExtra("adding", false);
+                i.putExtra("itemPosition", position);
 
+                startActivityForResult(i, 1);
             });
 
             Button removeButton = itemView.findViewById(R.id.removeButton);
@@ -103,7 +107,7 @@ public class MainActivity extends AppCompatActivity {
         if(requestCode == 1 && resultCode == RESULT_OK){
             String resultString = result.getData().toString();
 
-            if(resultString.equals("ITEM_DELETED")){
+            if(resultString.equals("LIST_CHANGE")){
                 itemAdapter.notifyDataSetChanged();
             }
         }
@@ -157,18 +161,21 @@ public class MainActivity extends AppCompatActivity {
         addButton.setOnClickListener(view -> {
             Intent i = new Intent(this, addEditItemActivity.class);
             i.putExtra("adding", true);
-            startActivity(i);
+            startActivityForResult(i,1);
         });
 
         ///// Gets the url that was shared and sets it as new url
-        /*String action = getIntent().getAction();
+        String action = getIntent().getAction();
         String type = getIntent().getType();
         if (Intent.ACTION_SEND.equalsIgnoreCase(action)
                 && type != null && ("text/plain".equals(type))){
             String url = getIntent().getStringExtra(Intent.EXTRA_TEXT);
-            //item1.setURL(url);
+            Intent i = new Intent(this, addEditItemActivity.class);
+            i.putExtra("sharedUrl", url);
+            i.putExtra("adding", true);
+            startActivityForResult(i, 1);
 
-        }*/
+        }
 
     }
 }

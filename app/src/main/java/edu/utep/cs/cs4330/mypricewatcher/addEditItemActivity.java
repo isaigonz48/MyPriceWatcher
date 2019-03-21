@@ -1,8 +1,11 @@
 package edu.utep.cs.cs4330.mypricewatcher;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.widget.Button;
 import android.widget.EditText;
 
@@ -15,6 +18,10 @@ public class addEditItemActivity extends AppCompatActivity {
 
     Button cancelButton;
     Button confirmButton;
+
+    int pos;
+    Item editItem;
+    ItemList list;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,24 +36,79 @@ public class addEditItemActivity extends AppCompatActivity {
         curPrice = findViewById(R.id.curPrice);
         itemUrl = findViewById(R.id.itemUrl);
 
-        int pos;
-        Item item;
+        list = ItemList.getInstance();
+
         if(adding == false){
             pos = i.getIntExtra("itemPosition", 0);
-            ItemList list = ItemList.getInstance();
-            item = list.get(pos);
+            editItem = list.get(pos);
 
-            itemName.setText(item.getName());
-            initPrice.setText(String.format("%.02f", item.getInitPrice()));
-            curPrice.setText(String.format("%.02f", item.getCurPrice()));
-            itemUrl.setText(item.getUrl());
+            itemName.setText(editItem.getName());
+            initPrice.setText(String.format("%.02f", editItem.getInitPrice()));
+            curPrice.setText(String.format("%.02f", editItem.getCurPrice()));
+            itemUrl.setText(editItem.getUrl());
+
+            initPrice.setEnabled(false);
+        }else{
+            if(i.getStringExtra("sharedUrl") != null){
+                String sharedUrl = i.getStringExtra("sharedUrl");
+                itemUrl.setText(sharedUrl);
+            }
         }
+
+        /*String action = getIntent().getAction();
+        String type = getIntent().getType();
+        if (Intent.ACTION_SEND.equalsIgnoreCase(action)
+                && type != null && ("text/plain".equals(type))){
+            String url = getIntent().getStringExtra(Intent.EXTRA_TEXT);
+            itemUrl.setText(url);
+        }*/
+
+        initPrice.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                curPrice.setText(initPrice.getText());
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
 
         cancelButton = findViewById(R.id.cancelButton);
         confirmButton = findViewById(R.id.confirmButton);
 
         cancelButton.setOnClickListener(view ->{
             finish();
+        });
+
+        confirmButton.setOnClickListener(view ->{
+            if(adding == true){
+                Item newItem = new Item(itemName.getText().toString(), Double.parseDouble(initPrice.getText().toString()), itemUrl.getText().toString());
+                newItem.setCurPrice(Double.parseDouble(curPrice.getText().toString()));
+                list.add(newItem);
+
+                Intent result = new Intent();
+                result.setData(Uri.parse("LIST_CHANGE"));
+                setResult(RESULT_OK, result);
+                finish();
+            }else{
+                //int pos = i.getIntExtra("itemPosition", 0);
+                //Item item = list.get(pos);
+                editItem.setName(itemName.getText().toString());
+                editItem.setCurPrice(Double.parseDouble(curPrice.getText().toString()));
+                editItem.setURL(itemUrl.getText().toString());
+
+                Intent result = new Intent();
+                result.setData(Uri.parse("LIST_CHANGE"));
+                setResult(RESULT_OK, result);
+                finish();
+            }
         });
     }
 }

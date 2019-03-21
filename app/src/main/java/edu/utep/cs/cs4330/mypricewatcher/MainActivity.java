@@ -21,11 +21,13 @@ import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 
 
@@ -34,13 +36,17 @@ public class MainActivity extends AppCompatActivity {
     private Button refreshButton;
     private Button addButton;
     private static ItemList wishList;
+    private ItemListAdapter itemAdapter;
+    private PopupMenu addEditMenu;
 
     private class ItemListAdapter extends ArrayAdapter<Item> {
 
         private final ItemList list;
+        private Context context;
 
         public ItemListAdapter(Context ctx, ItemList itemlist) {
-            super(ctx, -1, itemlist);
+            super(ctx, -1, itemlist.getList());
+            this.context = ctx;
             this.list = itemlist;
         }
 
@@ -48,18 +54,16 @@ public class MainActivity extends AppCompatActivity {
             View itemView = convertView != null ? convertView
                     : LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.item_list, parent, false);
-            //Grade.Score score = scores.get(position);
+
             Item item = list.get(position);
             TextView itemNameView = itemView.findViewById(R.id.itemName);
             TextView curPriceView = itemView.findViewById(R.id.curPrice);
             TextView initPriceView = itemView.findViewById(R.id.initPrice);
-            //TextView itemLinkView = itemView.findViewById(R.id.itemLink);
             TextView percentageOffView = itemView.findViewById(R.id.percentageOff);
 
             itemNameView.setText(item.getName());
             curPriceView.setText(String.format("Current Price: $%.02f", item.getCurPrice()));
             initPriceView.setText(String.format("Initial Price: $%.02f", item.getInitPrice()));
-            //itemLinkView.setText("Visit Website");
             percentageOffView.setText(String.format("%.02f%% off!", item.calcPercentageOff()));
 
             Button itemLinkButton = itemView.findViewById(R.id.itemLink);
@@ -68,6 +72,8 @@ public class MainActivity extends AppCompatActivity {
                 Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse(website));
                 startActivity(i);
             });
+
+
 
             Button editButton = itemView.findViewById(R.id.editButton);
                 editButton.setOnClickListener(view ->{
@@ -81,25 +87,39 @@ public class MainActivity extends AppCompatActivity {
             });
 
             itemView.setOnClickListener(view ->{
-                Intent i = new Intent(DetailedItemActivity);
-                startActivity(i));
+                Intent i = new Intent(this.context, DetailedItemActivity.class);
+                i.putExtra("itemPos", position);
+
+                startActivityForResult(i,1);
             });
+
+
 
             return itemView;
         }
     }
+
+    protected void onActivityResult(int requestCode, int resultCode, Intent result){
+        if(requestCode == 1 && resultCode == RESULT_OK){
+            String resultString = result.getData().toString();
+
+            if(resultString.equals("ITEM_DELETED")){
+                itemAdapter.notifyDataSetChanged();
+            }
+        }
+    }
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+
         refreshButton = findViewById(R.id.refreshButton);
         addButton = findViewById(R.id.addButton);
-        wishList = new ItemList();
-
-
-
+        wishList = ItemList.getInstance();
 
         ListView listview = findViewById(R.id.itemList);
 
@@ -109,23 +129,35 @@ public class MainActivity extends AppCompatActivity {
         Item chair = new Item("Chair", 34.85, "https://www.amazon.com/Bathroom-Safety-Shower-Bench-Chair/dp/B002VWK0WI/");
         Item tv = new Item("Television", 896.99, "https://www.amazon.com/LG-Electronics-65SK8000PUA-65-Inch-Ultra/dp/B079TT1RM1/");
 
-        wishList.add(broom);
+        wishList.getList().add(broom);
         wishList.add(mop);
         wishList.add(table);
         wishList.add(chair);
         wishList.add(tv);
 
-        ItemListAdapter itemAdapter = new ItemListAdapter(this, wishList);
+        itemAdapter = new ItemListAdapter(this, wishList);
 
         listview.setAdapter(itemAdapter);
 
         refreshButton.setOnClickListener(view -> {
             wishList.findNewPrices();
-            listview.setAdapter(itemAdapter);
+            itemAdapter.notifyDataSetChanged();
         });
 
-        addButton.setOnClickListener(view -> {
+        /*addEditMenu = new PopupMenu(this, addButton);
+        addEditMenu.inflate(R.menu.addedit_menu);
 
+        addEditMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                return false;
+            }
+        });*/
+
+        addButton.setOnClickListener(view -> {
+            Intent i = new Intent(this, addEditItemActivity.class);
+            i.putExtra("adding", true);
+            startActivity(i);
         });
 
         ///// Gets the url that was shared and sets it as new url

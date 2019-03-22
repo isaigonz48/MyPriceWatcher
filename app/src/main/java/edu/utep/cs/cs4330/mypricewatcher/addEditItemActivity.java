@@ -56,14 +56,6 @@ public class addEditItemActivity extends AppCompatActivity {
             }
         }
 
-        /*String action = getIntent().getAction();
-        String type = getIntent().getType();
-        if (Intent.ACTION_SEND.equalsIgnoreCase(action)
-                && type != null && ("text/plain".equals(type))){
-            String url = getIntent().getStringExtra(Intent.EXTRA_TEXT);
-            itemUrl.setText(url);
-        }*/
-
         initPrice.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -104,8 +96,6 @@ public class addEditItemActivity extends AppCompatActivity {
                 setResult(RESULT_OK, result);
                 finish();
             }else{
-                //int pos = i.getIntExtra("itemPosition", 0);
-                //Item item = list.get(pos);
                 editItem.setName(itemName.getText().toString());
                 editItem.setCurPrice(Double.parseDouble(curPrice.getText().toString()));
                 editItem.setURL(itemUrl.getText().toString());

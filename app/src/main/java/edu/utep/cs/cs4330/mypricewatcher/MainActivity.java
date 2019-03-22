@@ -137,18 +137,6 @@ public class MainActivity extends AppCompatActivity {
 
         ListView listview = findViewById(R.id.itemList);
 
-        Item broom = new Item("Broom", 29.97, "https://www.amazon.com/Cedar-Heavy-Commercial-Broom-Handle/dp/B0106FW42U/?th=1");
-        Item mop = new Item("Mop", 24.99, "https://www.amazon.com/Cedar-Commercial-Grade-Heavy-Looped-End-String/dp/B01BX7JKRC/");
-        Item table = new Item("Table", 20.87, "https://www.amazon.com/Furinno-11180GYW-BK-Simple-Design/dp/B01COV5A20/");
-        Item chair = new Item("Chair", 34.85, "https://www.amazon.com/Bathroom-Safety-Shower-Bench-Chair/dp/B002VWK0WI/");
-        Item tv = new Item("Television", 896.99, "https://www.amazon.com/LG-Electronics-65SK8000PUA-65-Inch-Ultra/dp/B079TT1RM1/");
-
-        wishList.getList().add(broom);
-        wishList.add(mop);
-        wishList.add(table);
-        wishList.add(chair);
-        wishList.add(tv);
-
         itemAdapter = new ItemListAdapter(this, wishList);
 
         listview.setAdapter(itemAdapter);
@@ -157,16 +145,6 @@ public class MainActivity extends AppCompatActivity {
             wishList.findNewPrices();
             itemAdapter.notifyDataSetChanged();
         });
-
-        /*addEditMenu = new PopupMenu(this, addButton);
-        addEditMenu.inflate(R.menu.addedit_menu);
-
-        addEditMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem item) {
-                return false;
-            }
-        });*/
 
         addButton.setOnClickListener(view -> {
             Intent i = new Intent(this, addEditItemActivity.class);
@@ -201,17 +179,34 @@ public class MainActivity extends AppCompatActivity {
         sortButton.setOnClickListener(view -> sortMenu.show());
 
         ///// Gets the url that was shared and sets it as new url
+
         String action = getIntent().getAction();
         String type = getIntent().getType();
         if (Intent.ACTION_SEND.equalsIgnoreCase(action)
-                && type != null && ("text/plain".equals(type))){
+                && type != null && ("text/plain".equals(type))) {
             String url = getIntent().getStringExtra(Intent.EXTRA_TEXT);
             Intent i = new Intent(this, addEditItemActivity.class);
             i.putExtra("sharedUrl", url);
             i.putExtra("adding", true);
             startActivityForResult(i, 1);
-
         }
 
     }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        String action = intent.getAction();
+        String type = intent.getType();
+        if (Intent.ACTION_SEND.equalsIgnoreCase(action)
+                && type != null && ("text/plain".equals(type))) {
+            String url = intent.getStringExtra(Intent.EXTRA_TEXT);
+            Intent i = new Intent(this, addEditItemActivity.class);
+            i.putExtra("sharedUrl", url);
+            i.putExtra("adding", true);
+            startActivityForResult(i, 1);
+        }
+    }
+
+
 }

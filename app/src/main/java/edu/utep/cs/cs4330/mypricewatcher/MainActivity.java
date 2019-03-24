@@ -1,16 +1,19 @@
 /**
 **   @author Isai Gonzalez
 **  CS 4350: Mobile Application Development
-**   @date Feb 20, 2019
+**   @date March 24, 2019
 **
 **   My Price Watcher
 **
-**   Application for android that has the price of an item from Amazon. The app can refresh
-**   the price of the item, this will only return a new simulated price for the item. The user
-**   can also visit the webpage for the item by clicking on the button specified. Future
-**   versions of this app will be able to contain several items and update the prices with
-**   actual prices from stores.
-**  MainActivity class is an activity class that manages the way the screen looks and events.
+**   Application for android that has a list of items attained from the web. Each item has its own
+**   name, initial price, current price, and a percentage off. The user will be able to add, remove,
+**   and edit items on the list. The user will be able to simulate new prices for the items on the
+**   list by clicking on the refresh button. There is also a sorting feature. The user can visit
+**   the web page of any item by clicking on the visit link button. Clicking on any item will also
+**   display more details of the item.
+**
+**   MainActivity class is an activity class that displays the list of items and handles events
+**   on the list.
 **/
 
 package edu.utep.cs.cs4330.mypricewatcher;
@@ -41,6 +44,9 @@ public class MainActivity extends AppCompatActivity {
     private ItemListAdapter itemAdapter;
     private PopupMenu sortMenu;
 
+    /**
+     * Item list adapter nested class makes an adapter that works with the item list.
+     */
     private class ItemListAdapter extends ArrayAdapter<Item> {
 
         private final ItemList list;
@@ -63,6 +69,7 @@ public class MainActivity extends AppCompatActivity {
             TextView initPriceView = itemView.findViewById(R.id.initPrice);
             TextView percentageOffView = itemView.findViewById(R.id.percentageOff);
 
+            ///// Prints item information
             itemNameView.setText(item.getName());
             curPriceView.setText(String.format("Current Price: $%.02f", item.getCurPrice()));
             initPriceView.setText(String.format("Initial Price: $%.02f", item.getInitPrice()));
@@ -75,6 +82,7 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(i);
             });
 
+            ///// Opends addEditItem activity
             Button editButton = itemView.findViewById(R.id.editButton);
             editButton.setOnClickListener(view ->{
                 Intent i = new Intent(this.context, addEditItemActivity.class);
@@ -98,12 +106,17 @@ public class MainActivity extends AppCompatActivity {
                 startActivityForResult(i,1);
             });
 
-
-
             return itemView;
         }
     }
 
+    /**
+     * Gets results from called activities. Needs to know what kind of change happened and refresh
+     * the list adapter.
+     * @param requestCode
+     * @param resultCode
+     * @param result
+     */
     protected void onActivityResult(int requestCode, int resultCode, Intent result){
         if(requestCode == 1 && resultCode == RESULT_OK){
             String resultString = result.getData().toString();
@@ -128,7 +141,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
         refreshButton = findViewById(R.id.refreshButton);
         addButton = findViewById(R.id.addButton);
         sortButton = findViewById(R.id.sortButton);
@@ -152,6 +164,8 @@ public class MainActivity extends AppCompatActivity {
             startActivityForResult(i,1);
         });
 
+
+        ///// Popup menu for sorting items
         sortMenu = new PopupMenu(this,sortButton);
         sortMenu.inflate(R.menu.sort_menu);
         sortMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
@@ -178,8 +192,8 @@ public class MainActivity extends AppCompatActivity {
 
         sortButton.setOnClickListener(view -> sortMenu.show());
 
-        ///// Gets the url that was shared and sets it as new url
 
+        ///// If url is shared with app and the app was not open, it opens addEditItem Activity
         String action = getIntent().getAction();
         String type = getIntent().getType();
         if (Intent.ACTION_SEND.equalsIgnoreCase(action)
@@ -193,6 +207,10 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * If a url is shared while the app is open, it will open addEditItem Activity
+     * @param intent
+     */
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);

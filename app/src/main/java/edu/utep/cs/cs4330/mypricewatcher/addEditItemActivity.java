@@ -1,3 +1,16 @@
+/**
+ **   @author Isai Gonzalez
+ **  CS 4350: Mobile Application Development
+ **   @date March 24, 2019
+ **
+ **   My Price Watcher
+ **
+ **   addEditItemActivity class is an activity class that will display the editing or adding
+ **   interface. Both of those functions are essentially the same, but, when editing an item, you
+ **   cannot change the initial price. Whatever changes are made will return to the MainActivity
+ **   class.
+ **/
+
 package edu.utep.cs.cs4330.mypricewatcher;
 
 import android.content.Intent;
@@ -30,6 +43,8 @@ public class addEditItemActivity extends AppCompatActivity {
         setContentView(R.layout.activity_add_edit_item);
 
         Intent i = getIntent();
+
+        ///// Adding an item if true, editing if false
         boolean adding = i.getBooleanExtra("adding", true);
 
         itemName = findViewById(R.id.itemName);
@@ -39,6 +54,8 @@ public class addEditItemActivity extends AppCompatActivity {
 
         list = ItemList.getInstance();
 
+        ///// If editing an item then the item must be gotten from the list.
+        ///// The initial price is also not able to be edited.
         if(!adding){
             pos = i.getIntExtra("itemPosition", 0);
             editItem = list.get(pos);
@@ -50,12 +67,14 @@ public class addEditItemActivity extends AppCompatActivity {
 
             initPrice.setEnabled(false);
         }else{
+            ///// Check if a url was shared and set it if yes.
             if(i.getStringExtra("sharedUrl") != null){
                 String sharedUrl = i.getStringExtra("sharedUrl");
                 itemUrl.setText(sharedUrl);
             }
         }
 
+        ///// Automatically change the current price as the initial price is being set.
         initPrice.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -76,16 +95,19 @@ public class addEditItemActivity extends AppCompatActivity {
         cancelButton = findViewById(R.id.cancelButton);
         confirmButton = findViewById(R.id.confirmButton);
 
+        ///// Nothing happens
         cancelButton.setOnClickListener(view ->{
             finish();
         });
 
         confirmButton.setOnClickListener(view ->{
-
+            ///// Price cannot be set to 0
             if(Double.parseDouble(curPrice.getText().toString()) <= 0 || Double.parseDouble(initPrice.getText().toString()) <= 0){
                 Toast.makeText(this, "Price cannot be 0!", Toast.LENGTH_SHORT).show();
                 return;
             }
+
+            ///// If adding the item, create the new item first
             if(adding){
                 Item newItem = new Item(itemName.getText().toString(), Double.parseDouble(initPrice.getText().toString()), itemUrl.getText().toString());
                 newItem.setCurPrice(Double.parseDouble(curPrice.getText().toString()));

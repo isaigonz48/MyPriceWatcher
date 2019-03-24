@@ -1,7 +1,7 @@
 /**
  **   @author Isai Gonzalez
  **  CS 4350: Mobile Application Development
- **   @date Feb 20, 2019
+ **   @date March 24, 2019
  **
  **   My Price Watcher
  **
@@ -34,7 +34,7 @@ public class Item {
     }
 
     /**
-     * Constructor that receives the name, initial price, and url of the item
+     * Constructor that receives the name, initial price, and url of the item. Automatically calculates percentage off.
      * @param n name of the item
      * @param i initial price of the item
      * @param url url of the item

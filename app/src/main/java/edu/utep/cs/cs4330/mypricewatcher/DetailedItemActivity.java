@@ -1,3 +1,15 @@
+/**
+ **   @author Isai Gonzalez
+ **  CS 4350: Mobile Application Development
+ **   @date March 24, 2019
+ **
+ **   My Price Watcher
+ **
+ **   DetailedItemActivity class is an activity class that displays the details of a chosen item.
+ **   This activity displays information that would be too much to display on the MainActivity.
+ **   Also includes a web view of the URL of the item.
+ **/
+
 package edu.utep.cs.cs4330.mypricewatcher;
 
 import android.content.Intent;
@@ -61,6 +73,7 @@ public class DetailedItemActivity extends AppCompatActivity {
             finish();
         });
 
+        ///// Calls edit activity and finishes so that it skips this activity on the way back.
         editButton.setOnClickListener(view ->{
             Intent editI = new Intent(this, addEditItemActivity.class);
             editI.putExtra("adding", false);
@@ -73,6 +86,7 @@ public class DetailedItemActivity extends AppCompatActivity {
             setResult(RESULT_OK, result);
             finish();
         });
+
         removeButton.setOnClickListener(view ->{
             Intent result = new Intent();
             result.setData(Uri.parse("ITEM_REMOVE"));

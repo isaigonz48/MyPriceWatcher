@@ -5,7 +5,7 @@
  **
  **   My Price Watcher
  **
- **   addEditItemActivity class is an activity class that will display the editing or adding
+ **   AddEditItemActivity class is an activity class that will display the editing or adding
  **   interface. Both of those functions are essentially the same, but, when editing an item, you
  **   cannot change the initial price. Whatever changes are made will return to the MainActivity
  **   class.
@@ -23,7 +23,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-public class addEditItemActivity extends AppCompatActivity {
+public class AddEditItemActivity extends AppCompatActivity {
 
     private EditText itemName;
     private EditText initPrice;

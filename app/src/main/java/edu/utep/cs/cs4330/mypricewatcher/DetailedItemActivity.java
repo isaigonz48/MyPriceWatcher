@@ -16,7 +16,6 @@ import android.content.Intent;
 import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Button;
@@ -75,7 +74,7 @@ public class DetailedItemActivity extends AppCompatActivity {
 
         ///// Calls edit activity and finishes so that it skips this activity on the way back.
         editButton.setOnClickListener(view ->{
-            Intent editI = new Intent(this, addEditItemActivity.class);
+            Intent editI = new Intent(this, AddEditItemActivity.class);
             editI.putExtra("adding", false);
             editI.putExtra("itemPosition", pos);
 

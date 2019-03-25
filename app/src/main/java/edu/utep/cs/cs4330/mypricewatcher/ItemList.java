@@ -15,8 +15,6 @@ package edu.utep.cs.cs4330.mypricewatcher;
 
 import java.util.ArrayList;
 import java.util.Collections;
-//import java.util.Comparator;
-//import java.util.List;
 
 public class ItemList{
 
@@ -78,7 +76,7 @@ public class ItemList{
     }
 
     /**
-     * Remoc\ve the given item from the list
+     * Remove the given item from the list
      * @param i item to be removed
      */
     public void remove(Item i){

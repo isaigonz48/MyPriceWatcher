@@ -25,17 +25,17 @@ import android.widget.Toast;
 
 public class addEditItemActivity extends AppCompatActivity {
 
-    EditText itemName;
-    EditText initPrice;
-    EditText curPrice;
-    EditText itemUrl;
+    private EditText itemName;
+    private EditText initPrice;
+    private EditText curPrice;
+    private EditText itemUrl;
 
-    Button cancelButton;
-    Button confirmButton;
+    private Button cancelButton;
+    private Button confirmButton;
 
-    int pos;
-    Item editItem;
-    ItemList list;
+    private int pos;
+    private Item editItem;
+    private ItemList list;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

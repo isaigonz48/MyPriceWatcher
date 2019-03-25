@@ -25,8 +25,8 @@ import android.widget.TextView;
 public class DetailedItemActivity extends AppCompatActivity {
 
     private TextView itemName;
-    private TextView currentPrice;
-    private TextView initialPrice;
+    private TextView curPrice;
+    private TextView initPrice;
     private TextView percentageOff;
     private TextView itemUrl;
 
@@ -48,8 +48,8 @@ public class DetailedItemActivity extends AppCompatActivity {
         Item item = list.get(pos);
 
         itemName = findViewById(R.id.itemName);
-        currentPrice = findViewById(R.id.curPrice);
-        initialPrice = findViewById(R.id.initPrice);
+        curPrice = findViewById(R.id.curPrice);
+        initPrice = findViewById(R.id.initPrice);
         percentageOff = findViewById(R.id.percentageOff);
         itemUrl = findViewById(R.id.itemLink);
 
@@ -62,8 +62,8 @@ public class DetailedItemActivity extends AppCompatActivity {
 
 
         itemName.setText(item.getName());
-        currentPrice.setText(String.format("Current Price: $%.02f", item.getCurPrice()));
-        initialPrice.setText(String.format("Initial Price: $%.02f", item.getInitPrice()));
+        curPrice.setText(String.format("Current Price: $%.02f", item.getCurPrice()));
+        initPrice.setText(String.format("Initial Price: $%.02f", item.getInitPrice()));
         percentageOff.setText(String.format("%.02f%% off!", item.calcPercentageOff()));
         itemUrl.setText(item.getUrl());
         itemWebView.setWebViewClient(new WebViewClient());

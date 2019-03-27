@@ -30,7 +30,7 @@
 
         </activity>
         <activity android:name=".DetailedItemActivity" />
-        <activity android:name=".addEditItemActivity"/>
+        <activity android:name=".AddEditItemActivity"/>
     </application>
 
 </manifest>

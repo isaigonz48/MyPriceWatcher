@@ -14,6 +14,7 @@
 package edu.utep.cs.cs4330.mypricewatcher;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -26,8 +27,8 @@ import android.widget.Toast;
 public class AddEditItemActivity extends AppCompatActivity {
 
     private EditText itemName;
-    private EditText initPrice;
-    private EditText curPrice;
+    //private EditText initPrice;
+    //private EditText curPrice;
     private EditText itemUrl;
 
     private Button cancelButton;
@@ -48,8 +49,8 @@ public class AddEditItemActivity extends AppCompatActivity {
         boolean adding = i.getBooleanExtra("adding", true);
 
         itemName = findViewById(R.id.itemName);
-        initPrice = findViewById(R.id.initPrice);
-        curPrice = findViewById(R.id.curPrice);
+        //initPrice = findViewById(R.id.initPrice);
+        //curPrice = findViewById(R.id.curPrice);
         itemUrl = findViewById(R.id.itemUrl);
 
         list = ItemList.getInstance();
@@ -61,11 +62,11 @@ public class AddEditItemActivity extends AppCompatActivity {
             editItem = list.get(pos);
 
             itemName.setText(editItem.getName());
-            initPrice.setText(String.format("%.02f", editItem.getInitPrice()));
-            curPrice.setText(String.format("%.02f", editItem.getCurPrice()));
+            //initPrice.setText(String.format("%.02f", editItem.getInitPrice()));
+            //curPrice.setText(String.format("%.02f", editItem.getCurPrice()));
             itemUrl.setText(editItem.getUrl());
 
-            initPrice.setEnabled(false);
+            //initPrice.setEnabled(false);
         }else{
             ///// Check if a url was shared and set it if yes.
             if(i.getStringExtra("sharedUrl") != null){
@@ -75,7 +76,7 @@ public class AddEditItemActivity extends AppCompatActivity {
         }
 
         ///// Automatically change the current price as the initial price is being set.
-        initPrice.addTextChangedListener(new TextWatcher() {
+        /*initPrice.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -90,7 +91,7 @@ public class AddEditItemActivity extends AppCompatActivity {
             public void afterTextChanged(Editable s) {
 
             }
-        });
+        });*/
 
         cancelButton = findViewById(R.id.cancelButton);
         confirmButton = findViewById(R.id.confirmButton);
@@ -109,9 +110,12 @@ public class AddEditItemActivity extends AppCompatActivity {
 
             ///// If adding the item, create the new item first
             if(adding){
-                Item newItem = new Item(itemName.getText().toString(), Double.parseDouble(initPrice.getText().toString()), itemUrl.getText().toString());
-                newItem.setCurPrice(Double.parseDouble(curPrice.getText().toString()));
+                double initPrice = 100*Math.random();
+                Item newItem = new Item(itemName.getText().toString(), initPrice, itemUrl.getText().toString());
+                newItem.setCurPrice(initPrice);
                 list.add(newItem);
+
+
 
                 Intent result = new Intent();
                 result.setData(Uri.parse("ITEM_ADD"));
@@ -119,7 +123,7 @@ public class AddEditItemActivity extends AppCompatActivity {
                 finish();
             }else{
                 editItem.setName(itemName.getText().toString());
-                editItem.setCurPrice(Double.parseDouble(curPrice.getText().toString()));
+                //editItem.setCurPrice(Double.parseDouble(curPrice.getText().toString()));
                 editItem.setURL(itemUrl.getText().toString());
 
                 Intent result = new Intent();

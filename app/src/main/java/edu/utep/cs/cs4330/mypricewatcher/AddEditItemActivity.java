@@ -115,7 +115,8 @@ public class AddEditItemActivity extends AppCompatActivity {
                 newItem.setCurPrice(initPrice);
                 list.add(newItem);
 
-
+                SharedPreferences Context.getSharedPreferences("itemname", MODE_PRIVATE);
+                SharedPreferences
 
                 Intent result = new Intent();
                 result.setData(Uri.parse("ITEM_ADD"));

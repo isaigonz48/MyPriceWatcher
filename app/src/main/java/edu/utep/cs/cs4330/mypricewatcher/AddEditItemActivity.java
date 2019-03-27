@@ -103,10 +103,10 @@ public class AddEditItemActivity extends AppCompatActivity {
 
         confirmButton.setOnClickListener(view ->{
             ///// Price cannot be set to 0
-            if(Double.parseDouble(curPrice.getText().toString()) <= 0 || Double.parseDouble(initPrice.getText().toString()) <= 0){
+            /*if(Double.parseDouble(curPrice.getText().toString()) <= 0 || Double.parseDouble(initPrice.getText().toString()) <= 0){
                 Toast.makeText(this, "Price cannot be 0!", Toast.LENGTH_SHORT).show();
                 return;
-            }
+            }*/
 
             ///// If adding the item, create the new item first
             if(adding){

@@ -11,4 +11,6 @@
     <string name="editInitial">Initial Price:</string>
     <string name="editCurrent">Current Price:</string>
     <string name="editUrl">URL:</string>
+    <string name="edit_item">Edit Item</string>
+    <string name="remove_item">Remove Item</string>
 </resources>

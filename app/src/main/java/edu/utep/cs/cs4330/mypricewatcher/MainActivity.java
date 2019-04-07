@@ -29,6 +29,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.PopupMenu;
 import android.widget.TextView;
@@ -47,9 +48,11 @@ public class MainActivity extends AppCompatActivity {
     /**
      * Item list adapter nested class makes an adapter that works with the item list.
      */
+
     private class ItemListAdapter extends ArrayAdapter<Item> {
 
         private final ItemList list;
+        //private PopupMenu itemMenu;
         private Context context;
 
         public ItemListAdapter(Context ctx, ItemList itemlist) {
@@ -75,14 +78,14 @@ public class MainActivity extends AppCompatActivity {
             initPriceView.setText(String.format("Initial Price: $%.02f", item.getInitPrice()));
             percentageOffView.setText(String.format("%.02f%% off!", item.calcPercentageOff()));
 
-            Button itemLinkButton = itemView.findViewById(R.id.itemLink);
+            /*Button itemLinkButton = itemView.findViewById(R.id.itemLink);
             itemLinkButton.setOnClickListener(view ->{
                 String website = item.getUrl();
                 Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse(website));
                 startActivity(i);
             });
 
-            ///// Opends addEditItem activity
+            ///// Opens addEditItem activity
             Button editButton = itemView.findViewById(R.id.editButton);
             editButton.setOnClickListener(view ->{
                 Intent i = new Intent(this.context, addEditItemActivity.class);
@@ -97,7 +100,7 @@ public class MainActivity extends AppCompatActivity {
                 wishList.remove(item);
                 this.notifyDataSetChanged();
                 Toast.makeText(this.context, "Item removed!", Toast.LENGTH_SHORT).show();
-            });
+            });*/
 
             itemView.setOnClickListener(view ->{
                 Intent i = new Intent(this.context, DetailedItemActivity.class);
@@ -105,6 +108,50 @@ public class MainActivity extends AppCompatActivity {
 
                 startActivityForResult(i,1);
             });
+
+            ImageButton itemMenuButton =  itemView.findViewById(R.id.itemMenuButton);
+            PopupMenu itemMenu = new PopupMenu(this.context,itemMenuButton);
+            itemMenu.inflate(R.menu.item_menu);
+            itemMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                @Override
+                public boolean onMenuItemClick(MenuItem clickedItem) {
+                    Intent i;// = null;
+                    switch (clickedItem.getItemId()){
+                        //Intent i = null;
+                        case R.id.item_edit:
+                            //wishList.sortByName();
+                            //itemAdapter.notifyDataSetChanged();
+                            //return true;
+                            i = new Intent(context, addEditItemActivity.class);
+                            i.putExtra("adding", false);
+                            i.putExtra("itemPosition", position);
+
+                            startActivityForResult(i, 1);
+                            return true;
+
+                        case R.id.item_remove:
+                            //wishList.sortByCurrentPrice();
+                            //itemAdapter.notifyDataSetChanged();
+                            //return true;
+                            wishList.remove(item);
+                            notifyDataSetChanged();
+                            Toast.makeText(context, "Item removed!", Toast.LENGTH_SHORT).show();
+                            return true;
+
+                        case R.id.item_visit:
+                            //wishList.sortByPercentage();
+                            //itemAdapter.notifyDataSetChanged();
+                            String website = item.getUrl();
+                            i = new Intent(Intent.ACTION_VIEW, Uri.parse(website));
+                            startActivity(i);
+                            return true;
+
+                    }
+                    return false;
+                }
+            });
+
+            itemMenuButton.setOnClickListener(view -> itemMenu.show());
 
             return itemView;
         }

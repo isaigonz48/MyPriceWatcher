@@ -18,36 +18,17 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <Button
-        android:id="@+id/removeButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        android:layout_marginStart="16dp"
-        android:text="@string/Remove"
-        app:layout_constraintBottom_toBottomOf="@+id/editButton"
-        app:layout_constraintStart_toEndOf="@+id/editButton" />
-
-    <Button
-        android:id="@+id/editButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        android:layout_marginStart="16dp"
-        android:text="@string/Edit"
-        app:layout_constraintBottom_toBottomOf="@+id/itemLink"
-        app:layout_constraintStart_toEndOf="@+id/itemLink" />
-
 
     <TextView
         android:id="@+id/curPrice"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="right"
-        android:layout_marginStart="16dp"
+        android:layout_marginStart="8dp"
         android:text="Current Price: 20"
+        android:textSize="14sp"
         app:layout_constraintBottom_toBottomOf="@+id/initPrice"
-        app:layout_constraintStart_toEndOf="@+id/initPrice" />
+        app:layout_constraintStart_toEndOf="@+id/percentageOff" />
 
     <TextView
         android:id="@+id/initPrice"
@@ -57,6 +38,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:text="Initial Price: 30"
+        android:textSize="14sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/itemName" />
 
@@ -65,21 +47,25 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="right"
-        android:layout_marginStart="16dp"
+        android:layout_marginStart="8dp"
         android:text="0.00 off!"
+        android:textSize="14sp"
         app:layout_constraintBottom_toBottomOf="@+id/curPrice"
-        app:layout_constraintStart_toEndOf="@+id/curPrice" />
+        app:layout_constraintStart_toEndOf="@+id/initPrice" />
 
-    <Button
-        android:id="@+id/itemLink"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="right"
+    <ImageButton
+        android:id="@+id/itemMenuButton"
+        android:layout_width="40dp"
+        android:layout_height="64dp"
         android:layout_marginTop="8dp"
-        android:text="@string/visit_website"
-        app:layout_constraintTop_toBottomOf="@+id/initPrice"
-        tools:layout_editor_absoluteX="9dp" />
-
+        android:layout_marginBottom="8dp"
+        android:adjustViewBounds="true"
+        android:background="@android:color/transparent"
+        android:scaleType="fitCenter"
+        app:layout_constraintBottom_toBottomOf="@+id/curPrice"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/itemName"
+        app:srcCompat="@drawable/ic_item_menu" />
 
 
 </android.support.constraint.ConstraintLayout>

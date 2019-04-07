@@ -88,7 +88,7 @@ public class MainActivity extends AppCompatActivity {
             ///// Opens addEditItem activity
             Button editButton = itemView.findViewById(R.id.editButton);
             editButton.setOnClickListener(view ->{
-                Intent i = new Intent(this.context, addEditItemActivity.class);
+                Intent i = new Intent(this.context, AddEditItemActivity.class);
                 i.putExtra("adding", false);
                 i.putExtra("itemPosition", position);
 
@@ -206,7 +206,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         addButton.setOnClickListener(view -> {
-            Intent i = new Intent(this, addEditItemActivity.class);
+            Intent i = new Intent(this, AddEditItemActivity.class);
             i.putExtra("adding", true);
             startActivityForResult(i,1);
         });
@@ -246,7 +246,7 @@ public class MainActivity extends AppCompatActivity {
         if (Intent.ACTION_SEND.equalsIgnoreCase(action)
                 && type != null && ("text/plain".equals(type))) {
             String url = getIntent().getStringExtra(Intent.EXTRA_TEXT);
-            Intent i = new Intent(this, addEditItemActivity.class);
+            Intent i = new Intent(this, AddEditItemActivity.class);
             i.putExtra("sharedUrl", url);
             i.putExtra("adding", true);
             startActivityForResult(i, 1);
@@ -266,7 +266,7 @@ public class MainActivity extends AppCompatActivity {
         if (Intent.ACTION_SEND.equalsIgnoreCase(action)
                 && type != null && ("text/plain".equals(type))) {
             String url = intent.getStringExtra(Intent.EXTRA_TEXT);
-            Intent i = new Intent(this, addEditItemActivity.class);
+            Intent i = new Intent(this, AddEditItemActivity.class);
             i.putExtra("sharedUrl", url);
             i.putExtra("adding", true);
             startActivityForResult(i, 1);

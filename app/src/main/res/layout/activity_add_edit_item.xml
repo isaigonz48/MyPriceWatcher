@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".addEditItemActivity">
+    tools:context=".AddEditItemActivity">
 
     <EditText
         android:id="@+id/itemName"
@@ -18,41 +18,17 @@
         app:layout_constraintTop_toBottomOf="@+id/cancelButton" />
 
     <EditText
-        android:id="@+id/initPrice"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="4dp"
-        android:inputType="numberDecimal"
-        android:text="0.00"
-        android:textSize="24sp"
-        app:layout_constraintStart_toEndOf="@+id/initPriceText"
-        app:layout_constraintTop_toBottomOf="@id/itemName" />
-
-    <EditText
-        android:id="@+id/curPrice"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="12dp"
-        android:inputType="numberDecimal"
-        android:text="0.00"
-        android:textSize="24sp"
-        app:layout_constraintStart_toEndOf="@+id/curPriceText"
-        app:layout_constraintTop_toBottomOf="@id/initPrice" />
-
-    <EditText
         android:id="@+id/itemUrl"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="4dp"
+        android:layout_marginTop="8dp"
         android:inputType="text"
         android:maxWidth="325dp"
         android:text="URL"
         android:textSize="24sp"
         app:layout_constraintStart_toEndOf="@+id/itemUrlText"
-        app:layout_constraintTop_toBottomOf="@id/curPrice" />
+        app:layout_constraintTop_toBottomOf="@+id/itemName" />
 
     <Button
         android:id="@+id/cancelButton"
@@ -82,26 +58,6 @@
         android:text="@string/editName"
         android:textSize="24sp"
         app:layout_constraintTop_toTopOf="@+id/itemName"
-        tools:layout_editor_absoluteX="8dp" />
-
-    <TextView
-        android:id="@+id/initPriceText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:text="@string/editInitial"
-        android:textSize="24sp"
-        app:layout_constraintTop_toTopOf="@+id/initPrice"
-        tools:layout_editor_absoluteX="7dp" />
-
-    <TextView
-        android:id="@+id/curPriceText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:text="@string/editCurrent"
-        android:textSize="24sp"
-        app:layout_constraintTop_toTopOf="@+id/curPrice"
         tools:layout_editor_absoluteX="8dp" />
 
     <TextView

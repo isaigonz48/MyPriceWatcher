@@ -1,29 +1,26 @@
 package edu.utep.cs.cs4330.mypricewatcher;
 
+import android.content.Context;
+
 import java.util.ArrayList;
 import java.util.Collections;
 
 public class DatabaseItemList extends ItemList{
 
-    private static ItemList listInstance = null;
-    private ArrayList<Item> list;
+    private ItemDatabaseHelper itemDatabaseHelper;
+    //private static ItemList listInstance = null;
+    //private ArrayList<Item> list;
 
     /**
      * Private constructor for the singleton class. When called, it also initializes five items as samples.
      */
-    private ItemList(){
-        list = new ArrayList<>();
-        Item broom = new Item("Broom", 29.97, "https://www.amazon.com/Cedar-Heavy-Commercial-Broom-Handle/dp/B0106FW42U/?th=1");
-        Item mop = new Item("Mop", 24.99, "https://www.amazon.com/Cedar-Commercial-Grade-Heavy-Looped-End-String/dp/B01BX7JKRC/");
-        Item table = new Item("Table", 20.87, "https://www.amazon.com/Furinno-11180GYW-BK-Simple-Design/dp/B01COV5A20/");
-        Item chair = new Item("Chair", 34.85, "https://www.amazon.com/Bathroom-Safety-Shower-Bench-Chair/dp/B002VWK0WI/");
-        Item tv = new Item("Television", 896.99, "https://www.amazon.com/LG-Electronics-65SK8000PUA-65-Inch-Ultra/dp/B079TT1RM1/");
-
-        list.add(broom);
-        list.add(mop);
-        list.add(table);
-        list.add(chair);
-        list.add(tv);
+    public DatabaseItemList(){
+        ItemList.getInstance();
+    }
+    public DatabaseItemManager(Context ctx) {
+        super.getInstance();
+        itemDatabaseHelper = new ItemDatabaseHelper(ctx);
+        //itemDatabaseHelper.allItems();
     }
 
     /**
@@ -31,10 +28,8 @@ public class DatabaseItemList extends ItemList{
      * @return Singleton ItemList
      */
     public static ItemList getInstance(){
-        if(listInstance == null){
-            listInstance = new ItemList();
-        }
-        return listInstance;
+
+        return ItemList.getInstance();
     }
 
     /**
@@ -42,15 +37,22 @@ public class DatabaseItemList extends ItemList{
      * @return list of items
      */
     public ArrayList<Item> getList(){
-        return this.list;
+        return super.getList();//ItemList.getInstance().getList();
     }
 
     /**
      * Adds an item to the list
      * @param i item to add
      */
+    @Override
     public void add(Item i){
-        list.add(i);
+        super.add(i);//list.add(i);
+        DatabaseItem item = itemDatabaseHelper.addItem(i.getName(), i.getInitPrice(),
+                i.getCurPrice(), i.getUrl());
+        //if (item != null) {
+        //    super.addItem(item);
+        //}
+        return item;
     }
 
     /**
@@ -59,7 +61,7 @@ public class DatabaseItemList extends ItemList{
      * @return item at the position
      */
     public Item get(int pos){
-        return list.get(pos);
+        return super.get(pos);//list.get(pos);
     }
 
     /**
@@ -67,52 +69,78 @@ public class DatabaseItemList extends ItemList{
      * @param i item to be removed
      */
     public void remove(Item i){
-        list.remove(i);
+        super.remove(i);//list.remove(i);
     }
 
     /**
      * Finds a new price for all the items in the list. For now only simulates new price.
      */
     public void findNewPrices(){
-        for(int i = 0; i < this.list.size(); i++){
+        super.findNewPrices();
+        /*for(int i = 0; i < this.list.size(); i++){
             Item item = this.list.get(i);
             item.findNewPrice();
             item.setPercentageOff();
-        }
+        }*/
     }
 
     /**
      * Sort list of items by name
      */
     public void sortByName(){
-        Collections.sort(list, (o1, o2) -> o1.getName().toLowerCase().compareTo(o2.getName().toLowerCase()));
+        super.sortByName();//Collections.sort(list, (o1, o2) -> o1.getName().toLowerCase().compareTo(o2.getName().toLowerCase()));
     }
 
     /**
      * Sort list of items by current price
      */
     public void sortByCurrentPrice(){
-        Collections.sort(list, (o1, o2) -> {
+        super.sortByCurrentPrice();
+        /*Collections.sort(list, (o1, o2) -> {
             if(o1.getCurPrice() > o2.getCurPrice())
                 return 1;
             else if(o1.getCurPrice() == o2.getCurPrice())
                 return 0;
             return -1;
-        });
+        });*/
     }
 
     /**
      * Sort list of items by percentage off
      */
     public void sortByPercentage(){
-        Collections.sort(list, (o1, o2) -> {
+        super.sortByPercentage();
+        /*Collections.sort(list, (o1, o2) -> {
             if(o1.getPercentageOff() > o2.getPercentageOff())
                 return -1;
             else if(o1.getPercentageOff() == o2.getPercentageOff())
                 return 0;
             return 1;
-        });
+        });*/
     }
 
 
 }
+public class DatabaseItemManager extends ItemManager {
+
+    private ItemDatabaseHelper itemDatabaseHelper;
+    …
+
+    public DatabaseItemManager(Context ctx, …) {
+        super (…);
+        itemDatabaseHelper = new ItemDatabaseHelper(ctx, …);
+        … itemDatabaseHelper.allItems() …
+    }
+
+    @Override
+    public DatabaseItem addItem(String name, String url, …) {
+        DatabaseItem item = itemDatabaseHelper.addItem(name, url, …);
+        if (item != null) {
+            super.addItem(item);
+        }
+        return item;
+    }
+
+    // override other mutation methods such as update and remove
+}
+

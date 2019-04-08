@@ -122,7 +122,7 @@ public class MainActivity extends AppCompatActivity {
                             //wishList.sortByName();
                             //itemAdapter.notifyDataSetChanged();
                             //return true;
-                            i = new Intent(context, addEditItemActivity.class);
+                            i = new Intent(context, AddEditItemActivity.class);
                             i.putExtra("adding", false);
                             i.putExtra("itemPosition", position);
 

@@ -121,26 +121,3 @@ public class DatabaseItemList extends ItemList{
 
 
 }
-public class DatabaseItemManager extends ItemManager {
-
-    private ItemDatabaseHelper itemDatabaseHelper;
-    …
-
-    public DatabaseItemManager(Context ctx, …) {
-        super (…);
-        itemDatabaseHelper = new ItemDatabaseHelper(ctx, …);
-        … itemDatabaseHelper.allItems() …
-    }
-
-    @Override
-    public DatabaseItem addItem(String name, String url, …) {
-        DatabaseItem item = itemDatabaseHelper.addItem(name, url, …);
-        if (item != null) {
-            super.addItem(item);
-        }
-        return item;
-    }
-
-    // override other mutation methods such as update and remove
-}
-

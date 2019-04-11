@@ -17,11 +17,11 @@ import android.widget.TextView;
 
 
 public class Item {
-    private String name;
-    private double currentPrice;
-    private double initialPrice;
-    private String URL;
-    private double percentageOff;
+    protected String name;
+    protected double currentPrice;
+    protected double initialPrice;
+    protected String URL;
+    protected double percentageOff;
 
     /**
      * Default Constructor
@@ -43,6 +43,14 @@ public class Item {
         this.name = n;
         this.initialPrice = i;
         this.currentPrice = this.initialPrice;
+        this.URL = url;
+        this.percentageOff = calcPercentageOff();
+    }
+
+    public Item(String n, double i, double c, String url){
+        this.name = n;
+        this.initialPrice = i;
+        this.currentPrice = c;
         this.URL = url;
         this.percentageOff = calcPercentageOff();
     }

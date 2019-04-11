@@ -41,7 +41,7 @@ public class MainActivity extends AppCompatActivity {
     private Button refreshButton;
     private Button addButton;
     private Button sortButton;
-    private static ItemList wishList;
+    private static DatabaseItemList wishList;
     private ItemListAdapter itemAdapter;
     private PopupMenu sortMenu;
 
@@ -54,6 +54,7 @@ public class MainActivity extends AppCompatActivity {
         private final ItemList list;
         //private PopupMenu itemMenu;
         private Context context;
+
 
         public ItemListAdapter(Context ctx, ItemList itemlist) {
             super(ctx, -1, itemlist.getList());
@@ -192,7 +193,7 @@ public class MainActivity extends AppCompatActivity {
         addButton = findViewById(R.id.addButton);
         sortButton = findViewById(R.id.sortButton);
 
-        wishList = ItemList.getInstance();
+        wishList = new DatabaseItemList(this);
 
         ListView listview = findViewById(R.id.itemList);
 

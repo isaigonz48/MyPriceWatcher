@@ -19,12 +19,12 @@ import java.util.Collections;
 public class ItemList{
 
     private static ItemList listInstance = null;
-    private ArrayList<Item> list;
+    protected ArrayList<Item> list;
 
     /**
      * Private constructor for the singleton class. When called, it also initializes five items as samples.
      */
-    private ItemList(){
+    protected ItemList(){
         list = new ArrayList<>();
         Item broom = new Item("Broom", 29.97, "https://www.amazon.com/Cedar-Heavy-Commercial-Broom-Handle/dp/B0106FW42U/?th=1");
         Item mop = new Item("Mop", 24.99, "https://www.amazon.com/Cedar-Commercial-Grade-Heavy-Looped-End-String/dp/B01BX7JKRC/");

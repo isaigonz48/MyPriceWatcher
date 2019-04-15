@@ -52,7 +52,7 @@ public class MainActivity extends AppCompatActivity {
 
     private class ItemListAdapter extends ArrayAdapter<Item> {
 
-        private final ItemList list;
+        private final DatabaseItemList list;
         //private PopupMenu itemMenu;
         private Context context;
 
@@ -60,7 +60,7 @@ public class MainActivity extends AppCompatActivity {
         public ItemListAdapter(Context ctx, ItemList itemlist) {
             super(ctx, -1, itemlist.getList());
             this.context = ctx;
-            this.list = itemlist;
+            this.list = (DatabaseItemList)itemlist;
         }
 
         public View getView(int position, View convertView, ViewGroup parent) {
@@ -146,6 +146,12 @@ public class MainActivity extends AppCompatActivity {
                             String website = item.getUrl();
                             i = new Intent(Intent.ACTION_VIEW, Uri.parse(website));
                             startActivity(i);
+                            return true;
+
+                        case R.id.item_refresh:
+                            item.findNewPrice();
+                            list.updateItem(item);
+                            notifyDataSetChanged();
                             return true;
 
                     }

@@ -98,5 +98,6 @@ public class Item {
      */
     public void findNewPrice(){
         currentPrice = PriceFinder.simulatePrice(this.initialPrice);
+        setPercentageOff();
     }
 }

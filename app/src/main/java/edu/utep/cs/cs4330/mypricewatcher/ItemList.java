@@ -90,7 +90,7 @@ public class ItemList{
         for(int i = 0; i < this.list.size(); i++){
             Item item = this.list.get(i);
             item.findNewPrice();
-            item.setPercentageOff();
+            //item.setPercentageOff();
         }
     }
 

@@ -108,7 +108,7 @@ public class MainActivity extends AppCompatActivity {
                             new AlertDialog.Builder(context)
                                     .setTitle("Remove Item")
                                     .setMessage("Do you really want to remove this itemr?")
-                                    .setIcon(android.R.drawable.ic_dialog_alert)
+                                    //.setIcon(android.R.drawable.ic_dialog_alert)
                                     .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
 
                                         public void onClick(DialogInterface dialog, int whichButton) {

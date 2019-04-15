@@ -19,8 +19,10 @@
 package edu.utep.cs.cs4330.mypricewatcher;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -44,7 +46,6 @@ public class MainActivity extends AppCompatActivity {
     private static DatabaseItemList wishList;
     private ItemListAdapter itemAdapter;
     private PopupMenu sortMenu;
-    private DatabaseItemList databaseWishList;
 
     /**
      * Item list adapter nested class makes an adapter that works with the item list.
@@ -80,30 +81,6 @@ public class MainActivity extends AppCompatActivity {
             initPriceView.setText(String.format("Initial Price: $%.02f", item.getInitPrice()));
             percentageOffView.setText(String.format("%.02f%% off!", item.calcPercentageOff()));
 
-            /*Button itemLinkButton = itemView.findViewById(R.id.itemLink);
-            itemLinkButton.setOnClickListener(view ->{
-                String website = item.getUrl();
-                Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse(website));
-                startActivity(i);
-            });
-
-            ///// Opens addEditItem activity
-            Button editButton = itemView.findViewById(R.id.editButton);
-            editButton.setOnClickListener(view ->{
-                Intent i = new Intent(this.context, AddEditItemActivity.class);
-                i.putExtra("adding", false);
-                i.putExtra("itemPosition", position);
-
-                startActivityForResult(i, 1);
-            });
-
-            Button removeButton = itemView.findViewById(R.id.removeButton);
-            removeButton.setOnClickListener(view ->{
-                wishList.remove(item);
-                this.notifyDataSetChanged();
-                Toast.makeText(this.context, "Item removed!", Toast.LENGTH_SHORT).show();
-            });*/
-
             itemView.setOnClickListener(view ->{
                 Intent i = new Intent(this.context, DetailedItemActivity.class);
                 i.putExtra("itemPos", position);
@@ -117,13 +94,9 @@ public class MainActivity extends AppCompatActivity {
             itemMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                 @Override
                 public boolean onMenuItemClick(MenuItem clickedItem) {
-                    Intent i;// = null;
+                    Intent i;
                     switch (clickedItem.getItemId()){
-                        //Intent i = null;
                         case R.id.item_edit:
-                            //wishList.sortByName();
-                            //itemAdapter.notifyDataSetChanged();
-                            //return true;
                             i = new Intent(context, AddEditItemActivity.class);
                             i.putExtra("adding", false);
                             i.putExtra("itemPosition", position);
@@ -132,17 +105,30 @@ public class MainActivity extends AppCompatActivity {
                             return true;
 
                         case R.id.item_remove:
-                            //wishList.sortByCurrentPrice();
-                            //itemAdapter.notifyDataSetChanged();
-                            //return true;
-                            wishList.remove(position);
-                            notifyDataSetChanged();
-                            Toast.makeText(context, "Item removed!", Toast.LENGTH_SHORT).show();
+                            new AlertDialog.Builder(context)
+                                    .setTitle("Remove Item")
+                                    .setMessage("Do you really want to remove this itemr?")
+                                    .setIcon(android.R.drawable.ic_dialog_alert)
+                                    .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+
+                                        public void onClick(DialogInterface dialog, int whichButton) {
+                                            wishList.remove(position);
+                                            notifyDataSetChanged();
+                                            Toast.makeText(context, "Item removed!", Toast.LENGTH_SHORT).show();
+                                            //Toast.makeText(MainActivity.this, "Yaay", Toast.LENGTH_SHORT).show();
+                                        }})
+                                    .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            return;
+                                        }
+                                    }).show();
+                            //wishList.remove(position);
+                            //notifyDataSetChanged();
+                            //Toast.makeText(context, "Item removed!", Toast.LENGTH_SHORT).show();
                             return true;
 
                         case R.id.item_visit:
-                            //wishList.sortByPercentage();
-                            //itemAdapter.notifyDataSetChanged();
                             String website = item.getUrl();
                             i = new Intent(Intent.ACTION_VIEW, Uri.parse(website));
                             startActivity(i);

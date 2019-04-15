@@ -90,14 +90,17 @@ public class DatabaseItemList extends ItemList{
         itemDatabaseHelper.removeItem(item);
     }
 
+    public void updateItem(Item i){
+        itemDatabaseHelper.updateItem((DatabaseItem) i);
+    }
 
     public void findNewPrices(){
         super.findNewPrices();
         for(int i = 0; i < this.list.size(); i++){
             DatabaseItem item = (DatabaseItem) this.list.get(i);
             itemDatabaseHelper.updateItem(item);
-            item.findNewPrice();
-            item.setPercentageOff();
+            //item.findNewPrice();
+            //item.setPercentageOff();
         }
     }
 

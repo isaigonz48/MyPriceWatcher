@@ -125,7 +125,7 @@ public class AddEditItemActivity extends AppCompatActivity {
                 editItem.setName(itemName.getText().toString());
                 //editItem.setCurPrice(Double.parseDouble(curPrice.getText().toString()));
                 editItem.setURL(itemUrl.getText().toString());
-
+                list.updateItem(editItem);
                 Intent result = new Intent();
                 result.setData(Uri.parse("ITEM_EDIT"));
                 setResult(RESULT_OK, result);

@@ -36,7 +36,8 @@ public class AddEditItemActivity extends AppCompatActivity {
 
     private int pos;
     private Item editItem;
-    private ItemList list;
+    //private ItemList list;
+    private DatabaseItemList list;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,8 +54,9 @@ public class AddEditItemActivity extends AppCompatActivity {
         //curPrice = findViewById(R.id.curPrice);
         itemUrl = findViewById(R.id.itemUrl);
 
-        list = ItemList.getInstance();
-
+        //list = ItemList.getInstance();
+        //list = new DatabaseItemList(this);
+        list = DatabaseItemList.getInstance(this);
         ///// If editing an item then the item must be gotten from the list.
         ///// The initial price is also not able to be edited.
         if(!adding){

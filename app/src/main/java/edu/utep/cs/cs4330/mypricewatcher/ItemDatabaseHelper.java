@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.provider.ContactsContract;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,6 +42,7 @@ public class ItemDatabaseHelper extends SQLiteOpenHelper {
 
         public DatabaseItem addItem(String name, double initialPrice, double currentPrice, String url){
             DatabaseItem item;
+
             SQLiteDatabase db = this.getWritableDatabase();
 
             ContentValues values = new ContentValues();
@@ -51,12 +53,38 @@ public class ItemDatabaseHelper extends SQLiteOpenHelper {
             values.put(KEY_URL, url);
 
             long id = db.insert(ITEM_TABLE, null, values);
+
+            //item = new DatabaseItem(id, name, initialPrice, url);
+
             db.close();
 
             item = new DatabaseItem(id, name, initialPrice,url);
             return item;
         }
 
+        public void removeItem(DatabaseItem item){
+            SQLiteDatabase db = this.getWritableDatabase();
+            db.delete(ITEM_TABLE,
+                    KEY_ID + " = ?",
+                    new String[]{Long.toString(item.getId())});
+            db.close();
+        }
+
+        public void updateItem(DatabaseItem item){
+            SQLiteDatabase db = this.getWritableDatabase();
+
+            ContentValues values = new ContentValues();
+            values.put(KEY_NAME, item.name);
+            values.put(KEY_CURRENT_PRICE, item.getCurPrice());
+            values.put(KEY_INITIAL_PRICE, item.getInitPrice());
+            values.put(KEY_URL, item.getUrl());
+
+            db.update(ITEM_TABLE,
+                    values,
+                    KEY_ID + " = ?",
+                    new String[] {Long.toString(item.getId())});
+            db.close();
+        }
         public ArrayList<Item> allItems(){
             ArrayList<Item> itemList = new ArrayList<>();
             String selectQuery = "SELECT * FROM " + ITEM_TABLE;
@@ -70,7 +98,7 @@ public class ItemDatabaseHelper extends SQLiteOpenHelper {
                     double currentPrice = cursor.getDouble(3);
                     String url = cursor.getString(4);
 
-                    Item task = new Item(name, initialPrice, currentPrice, url);
+                    DatabaseItem task = new DatabaseItem(id, name, initialPrice, currentPrice, url);
                     itemList.add(task);
                 } while (cursor.moveToNext());
             }

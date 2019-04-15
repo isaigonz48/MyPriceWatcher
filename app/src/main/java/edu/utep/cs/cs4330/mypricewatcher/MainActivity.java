@@ -44,6 +44,7 @@ public class MainActivity extends AppCompatActivity {
     private static DatabaseItemList wishList;
     private ItemListAdapter itemAdapter;
     private PopupMenu sortMenu;
+    private DatabaseItemList databaseWishList;
 
     /**
      * Item list adapter nested class makes an adapter that works with the item list.
@@ -134,7 +135,7 @@ public class MainActivity extends AppCompatActivity {
                             //wishList.sortByCurrentPrice();
                             //itemAdapter.notifyDataSetChanged();
                             //return true;
-                            wishList.remove(item);
+                            wishList.remove(position);
                             notifyDataSetChanged();
                             Toast.makeText(context, "Item removed!", Toast.LENGTH_SHORT).show();
                             return true;
@@ -193,7 +194,9 @@ public class MainActivity extends AppCompatActivity {
         addButton = findViewById(R.id.addButton);
         sortButton = findViewById(R.id.sortButton);
 
-        wishList = new DatabaseItemList(this);
+        //wishList = new DatabaseItemList(this);
+        //wishList = ItemList.getInstance();
+        wishList = DatabaseItemList.getInstance(this);
 
         ListView listview = findViewById(R.id.itemList);
 

@@ -2,11 +2,11 @@ package edu.utep.cs.cs4330.mypricewatcher;
 
 public class DatabaseItem extends Item{
     private long id;
-    private String name;
-    private double currentPrice;
-    private double initialPrice;
-    private String URL;
-    private double percentageOff;
+    //private String name;
+    //private double currentPrice;
+    //private double initialPrice;
+    //private String URL;
+    //private double percentageOff;
 
     /**
      * Default Constructor
@@ -41,7 +41,10 @@ public class DatabaseItem extends Item{
         this.id = id;
     }
 
-    public String getName(){
+    public long getId(){
+        return this.id;
+    }
+    /*public String getName(){
         return this.name;
     }
     public double getCurPrice(){
@@ -69,12 +72,12 @@ public class DatabaseItem extends Item{
     public void setPercentageOff(){
         this.percentageOff = calcPercentageOff();
     }
-
+*/
 
     /**
      * Calculates the percentage difference between the initial price and the current price.
      * @return the percentage off
-     */
+     *
     public double calcPercentageOff(){
         return super.calcPercentageOff();///return (100.00 - (this.currentPrice/this.initialPrice) * 100);
     }
@@ -82,9 +85,9 @@ public class DatabaseItem extends Item{
     /**
      * Find the current price of the item. For this version of the app, it is only a simulated
      * price.
-     */
+     *
     public void findNewPrice(){
         super.findNewPrice();//currentPrice = PriceFinder.simulatePrice(this.initialPrice);
     }
-
+*/
 }

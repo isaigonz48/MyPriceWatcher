@@ -12,6 +12,11 @@
 
 package edu.utep.cs.cs4330.mypricewatcher;
 
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.URLConnection;
+
 public class PriceFinder {
 
     /**
@@ -21,5 +26,29 @@ public class PriceFinder {
      */
     public static double simulatePrice(double initialPrice){
         return Math.random() * initialPrice;
+    }
+
+    public double findPrice(String url){
+        double price = -1;
+
+        URL url = new URL("url");
+        URLConnection conn = url.openConnection();
+        HttpURLConnection httpConn = (HttpURLConnection) conn;
+        httpConn.setAllowUserInteraction(false);
+        httpConn.setInstanceFollowRedirects(true);
+        httpConn.setRequestMethod("GET");
+        httpConn.connect();
+        if (HttpURLConnection.HTTP_OK == httpConn.getResponseCode()) {
+            InputStream in = httpConn.getInputStream();
+            String line;
+            while(line = in.read() != null){
+
+            }
+            //... read from in ...
+        }
+
+
+
+        return price;
     }
 }

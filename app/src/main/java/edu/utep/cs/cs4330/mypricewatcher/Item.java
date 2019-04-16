@@ -33,6 +33,15 @@ public class Item {
         this.URL = "https://www.amazon.com/Cedar-Heavy-Commercial-Broom-Handle/dp/B0106FW42U/ref=sr_1_8_a_it?ie=UTF8&qid=1550354047&sr=8-8&keywords=broom&th=1";
     }
 
+    public Item(String n, String url){
+        this.name = n;
+        this.URL = url;
+
+        PriceFinder finder = new PriceFinder();
+        initialPrice = finder.findPrice(URL);
+        currentPrice = initialPrice;
+        setPercentageOff();
+    }
     /**
      * Constructor that receives the name, initial price, and url of the item. Automatically calculates percentage off.
      * @param n name of the item
@@ -97,7 +106,9 @@ public class Item {
      * price.
      */
     public void findNewPrice(){
-        currentPrice = PriceFinder.simulatePrice(this.initialPrice);
+        //currentPrice = PriceFinder.simulatePrice(this.initialPrice);
+        PriceFinder finder = new PriceFinder();
+        currentPrice = finder.findPrice(URL);
         setPercentageOff();
     }
 }

@@ -33,6 +33,12 @@ import org.jsoup.nodes.Document;
 
 public class PriceFinder {
 
+    private double price;
+    private String url;
+    private Item item;
+
+    private int website;
+
     protected static final String USER_AGENT =
             "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.77 Safari/537.36";
 
@@ -48,90 +54,44 @@ public class PriceFinder {
 
 
     public double findPrice(String url) {
-        double price = -1;
+        //DatabaseItemList list = DatabaseItemList.getInstance();
 
-        /*URL url = new URL("url");
-        URLConnection conn = url.openConnection();
-        HttpURLConnection httpConn = (HttpURLConnection) conn;
-        httpConn.setAllowUserInteraction(false);
-        httpConn.setInstanceFollowRedirects(true);
-        httpConn.setRequestMethod("GET");
-        httpConn.connect();
-        if (HttpURLConnection.HTTP_OK == httpConn.getResponseCode()) {
-            InputStream in = httpConn.getInputStream();
-            String line;
-            while(line = in.read() != null){
+        //this.item = item;
+        price = -1;
 
-            }
-            //... read from in ...
-        }*/
-        String uurl = "https://www.amazon.com/gp/product/B077ZGRY9V/ref=ppx_yo_dt_b_asin_title_o00_s00?ie=UTF8&psc=1";
-        //String uurl = "https://www.homedepot.com/p/Weber-Spirit-II-E-310-3-Burner-Propane-Gas-Grill-in-Black-45010001/302996388";
-        //Main main = new Main();
-        String text = "";
-        try {
-            Document doc = Jsoup.connect(uurl).get();
-            text = doc.text();
+        this.url = url;
+        String site = url.substring(url.indexOf('.')+1);
+        site = site.substring(0,site.indexOf('.'));
+        if(site.length()>0) {
+            Log.d("ONETIME", site);
+        }else{
+            Log.d("ONETIME", "rip");
+            Log.d("ONETIME", url);
+        }
 
+        switch(site){
+            case "amazon":
+                website = 1;
+                break;
+            case "lowes":
+                website = 2;
+                break;
 
-        }catch(IOException e){ e.printStackTrace();}
+        }
 
-        Log.d("NETWORKTEST", text);
+        FindPriceThread test = new FindPriceThread();
+        Thread thread = new Thread(test);
+        thread.start();
 
-        /*try (BufferedReader reader = openUrl(uurl, USER_AGENT)) {
-            String line;
-            while ((line = reader.readLine()) != null) {
-                Log.d("NETWORKTEST", line);
-            }
-        } catch (IOException e) {
+        try{
+            thread.join();
+        }catch (InterruptedException e){
             e.printStackTrace();
-        }*/
+        }
 
-
+        //Log.d("AGGGG", Double.toString(price));
         return price;
     }
-    protected BufferedReader openUrl(String urlString, String userAgent) throws IOException {
-        URL url = new URL(urlString);
-        HttpURLConnection con = (HttpURLConnection) url.openConnection();
-        //con.setConnectTimeout(timeout);
-        con.setRequestMethod("GET");
-        con.setInstanceFollowRedirects(true);
-        con.setRequestProperty("Accept-Encoding", "gzip");
-        con.setRequestProperty("Upgrade-Insecure-Requests", "1");
-        if (userAgent != null) {
-            con.setRequestProperty("User-Agent", userAgent);
-        }
-        // required by BestBuy website.
-        String encoding = con.getContentEncoding();
-        if (encoding == null) {
-            encoding = "utf-8";
-        }
-        // Amazon sends gzipped documents even if not requested
-        InputStreamReader reader = null;
-        if ("gzip".equals(encoding)) {
-            reader = new InputStreamReader(new GZIPInputStream(con.getInputStream()));
-        } else {
-            reader = new InputStreamReader(con.getInputStream(), encoding);
-        }
-        return new BufferedReader(reader);
-    }
-}
-
-
-public class MainActivity extends AppCompatActivity {
-
-    private TextView textView;
-    private Button button2;
-    private Button button;
-    private String text;
-    private static final String url = "https://www.amazon.com/dp/B07CLPC2B9/ref=sspa_dk_detail_1?psc=1";
-    //private static final String url = "https://www.amazon.com/gp/product/B077ZGRY9V/ref=ppx_yo_dt_b_asin_title_o00_s00?ie=UTF8&psc=1";
-    //private static final String url = "https://www.homedepot.com/p/Weber-Spirit-II-E-310-3-Burner-Propane-Gas-Grill-in-Black-45010001/302996388";
-
-
-    protected static final String USER_AGENT =
-            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.77 Safari/537.36";
-
     protected BufferedReader openUrl(String urlString, String userAgent) throws IOException {
         URL url = new URL(urlString);
         HttpURLConnection con = (HttpURLConnection) url.openConnection();
@@ -169,98 +129,13 @@ public class MainActivity extends AppCompatActivity {
         return new BufferedReader(reader);
     }
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+    /*private class FindPriceSyncTask extends AsyncTask<Void,Void,Void> {
 
-        textView = findViewById(R.id.textView);
-        textView.setMovementMethod(new ScrollingMovementMethod());
-        button = findViewById(R.id.button);
-        button2 = findViewById(R.id.button2);
-
-        String uurl = "https://www.homedepot.com/p/Weber-Spirit-II-E-310-3-Burner-Propane-Gas-Grill-in-Black-45010001/302996388";
-
-        /*
-        URL url = new URL("http://www.cs.utep.edu/cheon/cs4330");
-        URLConnection conn = url.openConnection();
-        HttpURLConnection httpConn = (HttpURLConnection) conn;
-        httpConn.setAllowUserInteraction(false);
-        httpConn.setInstanceFollowRedirects(true);
-        httpConn.setRequestMethod("GET");
-        httpConn.connect();
-        String textt = "";
-        if (HttpURLConnection.HTTP_OK == httpConn.getResponseCode()) {
-            InputStream in = httpConn.getInputStream();
-            in.
-        }*/
-
-
-        //try (BufferedReader reader = openUrl(uurl, USER_AGENT)) {
-        //   String line;
-        //while ((line = reader.readLine()) != null) {
-        //    Log.d("TEST", line);
-        //}
-        //} catch (IOException e) {
-        //  e.printStackTrace();
-        //}
-
-
-        button2.setOnClickListener(view ->{
-            textView.setText("chill");
-        });
-
-        /*text = "";
-        try {
-            Document doc = Jsoup.connect(url).get();
-            text = doc.text();
-
-        }catch (IOException e){e.printStackTrace();}
-*/
-        button.setOnClickListener(view ->{
-            new TestSyncTask().execute();
-        });
-    }
-
-
-
-    private class TestSyncTask extends AsyncTask<Void,Void,Void> {
-
+        private String text;
         @Override
         protected Void doInBackground(Void... voids) {
             text = "";
-            /*Log.d("AGGGGG", "starting");
 
-            try {
-                Document doc = Jsoup.connect(url).get();
-                //InputStream input = new InputStreamReader(doc);
-                //BufferedReader reader = new BufferedReader(input);
-                String html = doc.html();
-                //doc = Jsoup.parse(html);
-                //Element link = doc.select("body").first();//html();
-
-                //String linkPrice = link.attr("href");
-                //Element tet = doc.getElementById("icItemPrice");
-                //String test = tet.id();
-                text = html;
-                //text = html;
-                //doc.htm
-
-            }catch (IOException e){e.printStackTrace();
-                Log.d("AGGGGG", "failure");
-            }
-            text = "";
-
-            try {
-                JSONArray JA = new JSONArray(text);
-                text = "";
-                for (int i = 0; i < JA.length(); i++) {
-                    JSONObject JO = (JSONObject) JA.get(i);
-                    //text = "Name: " + JO.get("icItemPrice");
-                }
-            }catch (JSONException e){e.printStackTrace();
-            Log.d("AGGGGG", "failure");
-            }*/
             Log.d("AGGGGGG", "goinnnnnng");
 
             try (BufferedReader reader = openUrl(url, USER_AGENT)) {
@@ -268,18 +143,46 @@ public class MainActivity extends AppCompatActivity {
 
                 String line;
                 while ((line = reader.readLine()) != null) {
+                    Log.d("AGGGGGG", line);
                     String[] lineSplit = line.split("\"");
                     for(int i = 0; i < lineSplit.length; i++){
                         boolean foundPrice = false;
-                        if(lineSplit[i].equals("priceblock_ourprice")) {
-                            text += lineSplit[i];
-                            foundPrice = true;
-                            Log.d("AGGGGG", "wow");
+                        if(website == 1) {
+
+                            if(lineSplit[i].equals("priceblock_ourprice")){
+                                //text += lineSplit[i];
+
+                                Document doc = Jsoup.parse(line);
+                                text = doc.body().text();
+                                if (!text.equals("")) {
+
+                                    text = text.substring(1);
+                                }
+                                //foundPrice = true;
+                                Log.d("AGGGGG", "wow");
+                            }
+                            if(lineSplit[i].equals("priceblock_ourprice")) {
+                                Document doc = Jsoup.parse(line);
+                                text = doc.body().text();
+                                if (!text.equals("")) {
+
+                                    text = text.substring(1);
+                                }
+                                //foundPrice = true;
+                                Log.d("AGGGGG", "wow");
+                            }
+
+                        }else if(website == 2){
+                            if(lineSplit[i].equals("price")) {
+                                text += lineSplit[i + 2];//foundPrice = true;
+                                Log.d("AGGGGG", "wow");
+                            }
                         }
 
-                        if(foundPrice){
+                        /*if(foundPrice){
                             Document doc = Jsoup.parse(line);
                             text = doc.body().text();
+                            break;
                         }
                     }
                     //Log.d("AGGGGGG","waiiiit");
@@ -293,7 +196,7 @@ public class MainActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
 
-            if(!text.equals("")){
+            /*if(!text.equals("")){
 
                 text = text.substring(1);
             }
@@ -308,10 +211,102 @@ public class MainActivity extends AppCompatActivity {
 
             Log.d("AGGGGGG", text);
 
-            textView.setText(text);
+            price = 0;
+            if(!text.equals("")){
+                price = Double.parseDouble(text);
+            }
+            //DatabaseItemList list = DatabaseItemList.getInstance();
+            //item.setCurPrice(price);
+            //list.updateItem(item);
+
+            Log.d("AGGGGGG", Double.toString(price));
+
+            //return price;
+            //textView.setText(text);
         }
     }
+*/
+    private class FindPriceThread implements Runnable{
 
+        @Override
+        public void run() {
+            String text = "";
+            text = "";
 
+            Log.d("AGGGGGG", "goinnnnnng");
 
+            try (BufferedReader reader = openUrl(url, USER_AGENT)) {
+                Log.d("AGGGGGG", "made it out aliiiiiiiiive");
+
+                String line;
+                boolean done = false;
+                while ((line = reader.readLine()) != null && !done) {
+                    //Log.d("AGGGGGG", line);
+                    String[] lineSplit = line.split("\"");
+                    for(int i = 0; i < lineSplit.length; i++){
+                        boolean foundPrice = false;
+                        if(website == 1) {
+
+                            if(lineSplit[i].equals("priceblock_ourprice")){
+                                //text += lineSplit[i];
+
+                                Document doc = Jsoup.parse(line);
+                                text = doc.body().text();
+                                if (!text.equals("")) {
+
+                                    text = text.substring(1);
+                                }
+                                //foundPrice = true;
+                                Log.d("AGGGGG", "wow");
+                            }else if(lineSplit[i].equals("priceblock_dealprice")) {
+                                Document doc = Jsoup.parse(line);
+                                text = doc.body().text();
+                                if (!text.equals("")) {
+
+                                    text = text.substring(1);
+                                }
+                                //foundPrice = true;
+                                Log.d("AGGGGG", "wow");
+                            }
+
+                        }else if(website == 2){
+                            if(lineSplit[i].equals("price")) {
+                                text += lineSplit[i + 2];//foundPrice = true;
+                                Log.d("AGGGGG", "wow");
+                            }
+                        }
+
+                        /*if(foundPrice){
+                            Document doc = Jsoup.parse(line);
+                            text = doc.body().text();
+                            break;
+                        }*/
+                    }
+                    //Log.d("AGGGGGG","waiiiit");
+
+                    //Log.d("AGGGGGG", line);
+                    // break;
+                }
+            } catch (IOException e) {
+                Log.d("AGGGGGG", "uh oh");
+
+                e.printStackTrace();
+            }
+
+            /*if(!text.equals("")){
+
+                text = text.substring(1);
+            }*/
+            price = 0;
+            if(!text.equals("")){
+                price = Double.parseDouble(text);
+            }
+            Log.d("AGGGGGG", Double.toString(price));
+
+        }
+    }
 }
+
+
+
+

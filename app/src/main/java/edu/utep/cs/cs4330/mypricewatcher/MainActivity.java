@@ -141,6 +141,9 @@ public class MainActivity extends AppCompatActivity {
                             item.findNewPrice();
                             list.updateItem(item);
                             notifyDataSetChanged();
+                            //PriceFinder finder = new PriceFinder();
+                            //finder.findPrice(item.getUrl());
+                            //notifyDataSetChanged();
                             return true;
 
                     }
@@ -203,7 +206,7 @@ public class MainActivity extends AppCompatActivity {
             wishList.findNewPrices();
             itemAdapter.notifyDataSetChanged();
             PriceFinder finder = new PriceFinder();
-            finder.findPrice("https://www.homedepot.com/p/MGP-13-in-D-26-in-W-35-in-H-Original-30-Bottle-Lacquer-Barrel-Cabinet-OBC-36/302878580");
+            //finder.findPrice("https://www.homedepot.com/p/MGP-13-in-D-26-in-W-35-in-H-Original-30-Bottle-Lacquer-Barrel-Cabinet-OBC-36/302878580");
         });
 
         addButton.setOnClickListener(view -> {

@@ -45,6 +45,14 @@ public class DatabaseItemList extends ItemList{
 
     }
 
+    public static DatabaseItemList getInstance(){
+        /*if(listInstance == null){
+            listInstance = new DatabaseItemList(ctx);
+            //itemDatabaseHelper = new ItemDatabaseHelper(ctx);
+        }*/
+        return listInstance;
+
+    }
 
     public static DatabaseItemList getInstance(Context ctx){
         if(listInstance == null){

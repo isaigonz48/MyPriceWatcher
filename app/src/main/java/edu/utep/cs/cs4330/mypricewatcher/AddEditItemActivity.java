@@ -113,8 +113,9 @@ public class AddEditItemActivity extends AppCompatActivity {
             ///// If adding the item, create the new item first
             if(adding){
                 double initPrice = 100*Math.random();
-                Item newItem = new Item(itemName.getText().toString(), initPrice, itemUrl.getText().toString());
-                newItem.setCurPrice(initPrice);
+                //Item newItem = new Item(itemName.getText().toString(), itemUrl.getText().toString());
+                Item newItem = new Item(itemName.getText().toString(), 2000, itemUrl.getText().toString());
+                //newItem.setCurPrice(initPrice);
                 list.add(newItem);
 
                 Intent result = new Intent();

@@ -3,6 +3,7 @@
     package="edu.utep.cs.cs4330.mypricewatcher">
 
     <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
 
     <application
         android:allowBackup="true"

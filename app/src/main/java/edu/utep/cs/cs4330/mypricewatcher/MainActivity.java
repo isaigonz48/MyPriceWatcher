@@ -21,7 +21,10 @@ package edu.utep.cs.cs4330.mypricewatcher;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
+import android.provider.Settings;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -199,6 +202,8 @@ public class MainActivity extends AppCompatActivity {
         refreshButton.setOnClickListener(view -> {
             wishList.findNewPrices();
             itemAdapter.notifyDataSetChanged();
+            PriceFinder finder = new PriceFinder();
+            finder.findPrice("https://www.homedepot.com/p/MGP-13-in-D-26-in-W-35-in-H-Original-30-Bottle-Lacquer-Barrel-Cabinet-OBC-36/302878580");
         });
 
         addButton.setOnClickListener(view -> {
@@ -247,6 +252,40 @@ public class MainActivity extends AppCompatActivity {
             i.putExtra("adding", true);
             startActivityForResult(i, 1);
         }
+
+        ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo wifi = connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+
+        if (!wifi.isConnected()){
+            AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+            dialog.setTitle("Wifi not connected");
+            dialog.setMessage("There is no WiFi connection");
+            dialog.setPositiveButton("Settings", new DialogInterface.OnClickListener(){
+
+                public void onClick(DialogInterface dialog, int whichButton) {
+                    Intent i = new Intent(Settings.ACTION_WIFI_SETTINGS);
+                    startActivity(i);
+                }
+            });
+            dialog.show();
+
+            //.setIcon(android.R.drawable.ic_dialog_alert)
+                    /*.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+
+                        public void onClick(DialogInterface dialog, int whichButton) {
+                            wishList.remove(position);
+                            notifyDataSetChanged();
+                            Toast.makeText(context, "Item removed!", Toast.LENGTH_SHORT).show();
+                            //Toast.makeText(MainActivity.this, "Yaay", Toast.LENGTH_SHORT).show();
+                        }})
+                    .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            return;
+                        }
+                    }).show();*/
+        }
+
 
     }
 

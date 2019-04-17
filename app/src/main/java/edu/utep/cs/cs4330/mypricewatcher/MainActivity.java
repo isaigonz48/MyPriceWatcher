@@ -1,16 +1,16 @@
 /**
 **   @author Isai Gonzalez
 **  CS 4350: Mobile Application Development
-**   @date March 24, 2019
+**   @date April 17, 2019
 **
 **   My Price Watcher
 **
 **   Application for android that has a list of items attained from the web. Each item has its own
 **   name, initial price, current price, and a percentage off. The user will be able to add, remove,
-**   and edit items on the list. The user will be able to simulate new prices for the items on the
-**   list by clicking on the refresh button. There is also a sorting feature. The user can visit
-**   the web page of any item by clicking on the visit link button. Clicking on any item will also
-**   display more details of the item.
+**   and edit items on the list. The user will be able to find new prices for the items on the
+**   list from their corresponding url by clicking on the refresh button. Each item also has its own
+**   refresh button. There is also a sorting feature. The user can visit
+**   the web page of any item by clicking on the visit link button.
 **
 **   MainActivity class is an activity class that displays the list of items and handles events
 **   on the list.
@@ -52,6 +52,7 @@ public class MainActivity extends AppCompatActivity {
 
     /**
      * Item list adapter nested class makes an adapter that works with the item list.
+     * In this version, uses a database item list.
      */
 
     private class ItemListAdapter extends ArrayAdapter<Item> {
@@ -84,11 +85,15 @@ public class MainActivity extends AppCompatActivity {
             initPriceView.setText(String.format("Initial Price: $%.02f", item.getInitPrice()));
             percentageOffView.setText(String.format("%.02f%% off!", item.calcPercentageOff()));
 
-            itemView.setOnClickListener(view ->{
-                Intent i = new Intent(this.context, DetailedItemActivity.class);
-                i.putExtra("itemPos", position);
+            ///// Individual refresh button for an item
+            ImageButton itemRefreshButton = itemView.findViewById(R.id.itemRefreshButton);
 
-                startActivityForResult(i,1);
+            itemRefreshButton.setOnClickListener(view ->{
+                item.findNewPrice();
+                list.updateItem(item);
+                notifyDataSetChanged();
+                Toast.makeText(context, "Item refreshed!", Toast.LENGTH_SHORT).show();
+
             });
 
             ImageButton itemMenuButton =  itemView.findViewById(R.id.itemMenuButton);
@@ -107,11 +112,11 @@ public class MainActivity extends AppCompatActivity {
                             startActivityForResult(i, 1);
                             return true;
 
+                            ///// Dialog to confirm the removal of an item
                         case R.id.item_remove:
                             new AlertDialog.Builder(context)
                                     .setTitle("Remove Item")
                                     .setMessage("Do you really want to remove this itemr?")
-                                    //.setIcon(android.R.drawable.ic_dialog_alert)
                                     .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
 
                                         public void onClick(DialogInterface dialog, int whichButton) {
@@ -126,24 +131,13 @@ public class MainActivity extends AppCompatActivity {
                                             return;
                                         }
                                     }).show();
-                            //wishList.remove(position);
-                            //notifyDataSetChanged();
-                            //Toast.makeText(context, "Item removed!", Toast.LENGTH_SHORT).show();
+
                             return true;
 
                         case R.id.item_visit:
                             String website = item.getUrl();
                             i = new Intent(Intent.ACTION_VIEW, Uri.parse(website));
                             startActivity(i);
-                            return true;
-
-                        case R.id.item_refresh:
-                            item.findNewPrice();
-                            list.updateItem(item);
-                            notifyDataSetChanged();
-                            //PriceFinder finder = new PriceFinder();
-                            //finder.findPrice(item.getUrl());
-                            //notifyDataSetChanged();
                             return true;
 
                     }
@@ -177,11 +171,52 @@ public class MainActivity extends AppCompatActivity {
             }else if(resultString.equals("ITEM_REMOVE")){
                 itemAdapter.notifyDataSetChanged();
                 Toast.makeText(this, "Item removed!", Toast.LENGTH_SHORT).show();
+            }else if(resultString.equals("ITEM_ADD_URL_INVALID")){
+                itemAdapter.notifyDataSetChanged();
+                Toast.makeText(this, "Item added! URL invalid", Toast.LENGTH_SHORT).show();
+            }else if(resultString.equals("ITEM_EDIT_URL_INVALID")){
+                itemAdapter.notifyDataSetChanged();
+                Toast.makeText(this, "Item changed! URL invalid", Toast.LENGTH_SHORT).show();
+            }else if(resultString.equals("ITEM_ADD_URL_UNSUPPORTED")){
+                itemAdapter.notifyDataSetChanged();
+                Toast.makeText(this, "Item added! Website not supported", Toast.LENGTH_SHORT).show();
+            }else if(resultString.equals("ITEM_EDIT_URL_UNSUPPORTED")){
+                itemAdapter.notifyDataSetChanged();
+                Toast.makeText(this, "Item changed! Website not supported", Toast.LENGTH_SHORT).show();
             }
         }
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
 
+        ///// Check for wifi status everytime the app is opened
+        ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo wifi = connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+
+        ///// Disclaimer: I used to different ways of making dialogs in this code because I was
+        ///// testing it out. My apologies
+        if (!wifi.isConnected()){
+            AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+            dialog.setTitle("Wifi not connected");
+            dialog.setMessage("There is no WiFi connection");
+            dialog.setPositiveButton("Settings", new DialogInterface.OnClickListener(){
+
+                public void onClick(DialogInterface dialog, int whichButton) {
+                    Intent i = new Intent(Settings.ACTION_WIFI_SETTINGS);
+                    startActivity(i);
+                }
+            });
+            dialog.setNegativeButton("Ok", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    return;
+                }
+            });
+            dialog.show();
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -192,8 +227,7 @@ public class MainActivity extends AppCompatActivity {
         addButton = findViewById(R.id.addButton);
         sortButton = findViewById(R.id.sortButton);
 
-        //wishList = new DatabaseItemList(this);
-        //wishList = ItemList.getInstance();
+        ///// Wishlist is now a database item list
         wishList = DatabaseItemList.getInstance(this);
 
         ListView listview = findViewById(R.id.itemList);
@@ -202,11 +236,11 @@ public class MainActivity extends AppCompatActivity {
 
         listview.setAdapter(itemAdapter);
 
+        ///// Refreshes all items on the list, can and is slow because of PriceFinder algorithm
         refreshButton.setOnClickListener(view -> {
             wishList.findNewPrices();
             itemAdapter.notifyDataSetChanged();
-            PriceFinder finder = new PriceFinder();
-            //finder.findPrice("https://www.homedepot.com/p/MGP-13-in-D-26-in-W-35-in-H-Original-30-Bottle-Lacquer-Barrel-Cabinet-OBC-36/302878580");
+            Toast.makeText(this, "All items refreshed!", Toast.LENGTH_SHORT).show();
         });
 
         addButton.setOnClickListener(view -> {
@@ -214,7 +248,6 @@ public class MainActivity extends AppCompatActivity {
             i.putExtra("adding", true);
             startActivityForResult(i,1);
         });
-
 
         ///// Popup menu for sorting items
         sortMenu = new PopupMenu(this,sortButton);
@@ -243,7 +276,6 @@ public class MainActivity extends AppCompatActivity {
 
         sortButton.setOnClickListener(view -> sortMenu.show());
 
-
         ///// If url is shared with app and the app was not open, it opens addEditItem Activity
         String action = getIntent().getAction();
         String type = getIntent().getType();
@@ -255,41 +287,6 @@ public class MainActivity extends AppCompatActivity {
             i.putExtra("adding", true);
             startActivityForResult(i, 1);
         }
-
-        ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo wifi = connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
-
-        if (!wifi.isConnected()){
-            AlertDialog.Builder dialog = new AlertDialog.Builder(this);
-            dialog.setTitle("Wifi not connected");
-            dialog.setMessage("There is no WiFi connection");
-            dialog.setPositiveButton("Settings", new DialogInterface.OnClickListener(){
-
-                public void onClick(DialogInterface dialog, int whichButton) {
-                    Intent i = new Intent(Settings.ACTION_WIFI_SETTINGS);
-                    startActivity(i);
-                }
-            });
-            dialog.show();
-
-            //.setIcon(android.R.drawable.ic_dialog_alert)
-                    /*.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-
-                        public void onClick(DialogInterface dialog, int whichButton) {
-                            wishList.remove(position);
-                            notifyDataSetChanged();
-                            Toast.makeText(context, "Item removed!", Toast.LENGTH_SHORT).show();
-                            //Toast.makeText(MainActivity.this, "Yaay", Toast.LENGTH_SHORT).show();
-                        }})
-                    .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            return;
-                        }
-                    }).show();*/
-        }
-
-
     }
 
     /**
@@ -299,6 +296,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
+
         String action = intent.getAction();
         String type = intent.getType();
         if (Intent.ACTION_SEND.equalsIgnoreCase(action)

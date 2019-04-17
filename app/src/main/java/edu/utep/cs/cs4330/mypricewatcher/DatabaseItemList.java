@@ -1,10 +1,22 @@
+/**
+ **   @author Isai Gonzalez
+ **  CS 4350: Mobile Application Development
+ **   @date April 17, 2019
+ **
+ **   My Price Watcher
+ **
+ **   This DatabaseItemList class is an extension of ItemList. It provides necessary features
+ **   to be able to use a SQLiteDatabase with this app. Mostly, the new methods will interact
+ **   with a ItemDatabaseHelper in some way. The singleton aspect of ItemList is retained in this
+ **   class.
+ **/
+
 package edu.utep.cs.cs4330.mypricewatcher;
 
 import android.content.Context;
 import android.util.Log;
 
 import java.util.ArrayList;
-import java.util.Collections;
 
 public class DatabaseItemList extends ItemList{
 
@@ -13,21 +25,20 @@ public class DatabaseItemList extends ItemList{
     private static DatabaseItemList listInstance;
     private static ItemDatabaseHelper itemDatabaseHelper;
 
-    //private static ItemList listInstance = null;
-    //private ArrayList<Item> list;
-    //private ArrayList<DatabaseItem> list;
-
+    /**
+     * Private constructor for this singleton class. Initializes 5 sample items to begin with.
+     * @param ctx Context needed for the ItemDatabaseHelper.
+     */
     private DatabaseItemList(Context ctx) {
-        //super();
         list = new ArrayList<>();
         Log.d(TAG, "Constructor called");
 
-        //ItemList.getInstance();
         if(itemDatabaseHelper == null)
             itemDatabaseHelper = new ItemDatabaseHelper(ctx);
-        //if(ItemList.getInstance().getList().size() <= 0)
-            list = itemDatabaseHelper.allItems();
-        //itemDatabaseHelper.allItems();
+
+        ///// Get all items already in the database
+        list = itemDatabaseHelper.allItems();
+
         if(this.list.size() <= 0) {
             Log.d(TAG, "Constructing new list");
             Item broom = new Item("Broom", 29.97, "https://www.amazon.com/Cedar-Heavy-Commercial-Broom-Handle/dp/B0106FW42U/?th=1");
@@ -45,101 +56,74 @@ public class DatabaseItemList extends ItemList{
 
     }
 
-    public static DatabaseItemList getInstance(){
-        /*if(listInstance == null){
-            listInstance = new DatabaseItemList(ctx);
-            //itemDatabaseHelper = new ItemDatabaseHelper(ctx);
-        }*/
-        return listInstance;
-
-    }
-
+    /**
+     * Gets the single object instance of this class. (Singleton). Creates it if it isn't already.
+     * @param ctx Context for initializing the ItemDatabaseHelper
+     * @return Singleton DatabaseItemList
+     */
     public static DatabaseItemList getInstance(Context ctx){
         if(listInstance == null){
             listInstance = new DatabaseItemList(ctx);
-            //itemDatabaseHelper = new ItemDatabaseHelper(ctx);
         }
         return listInstance;
 
     }
 
-
-    /*public ArrayList<Item> getList(){
-        return super.getList();//ItemList.getInstance().getList();
-    }*/
-
-
+    /**
+     * Adds item to the list as well as to the database
+     * @param i item to add
+     */
     @Override
     public void add(Item i){
-        //super.add(i);//list.add(i);
-
         DatabaseItem item = itemDatabaseHelper.addItem(i.getName(), i.getInitPrice(),
                 i.getCurPrice(), i.getUrl());
 
         list.add(item);
-        //if (item != null) {
-        //    super.addItem(item);
-        //}
-        //return item;
     }
 
-
+    /**
+     * Gets item at the given position
+     * @param pos position of the item desired
+     * @return Item at the given position
+     */
     public Item get(int pos){
         return list.get(pos);//list.get(pos);
     }
 
-    //@Override
+    /**
+     * Removes the item from the list as well as from the database
+     * @param pos Position of the item to be removed
+     */
     public void remove(int pos){
         DatabaseItem item = (DatabaseItem) list.get(pos);
 
-        //super.remove(item);
         list.remove(item);
 
         itemDatabaseHelper.removeItem(item);
     }
 
+    /**
+     * Update the item in the database
+     * @param i Item to be updated
+     */
     public void updateItem(Item i){
         itemDatabaseHelper.updateItem((DatabaseItem) i);
     }
 
+    /**
+     * Finds new prices for all of the items on the list. It also updates their values in the
+     * database.
+     */
     public void findNewPrices(){
         super.findNewPrices();
         for(int i = 0; i < this.list.size(); i++){
             DatabaseItem item = (DatabaseItem) this.list.get(i);
             itemDatabaseHelper.updateItem(item);
-            //item.findNewPrice();
-            //item.setPercentageOff();
+
         }
     }
 
 
-    public void sortByName(){
-        super.sortByName();//Collections.sort(list, (o1, o2) -> o1.getName().toLowerCase().compareTo(o2.getName().toLowerCase()));
-    }
-
-
-    public void sortByCurrentPrice(){
-        super.sortByCurrentPrice();
-        /*Collections.sort(list, (o1, o2) -> {
-            if(o1.getCurPrice() > o2.getCurPrice())
-                return 1;
-            else if(o1.getCurPrice() == o2.getCurPrice())
-                return 0;
-            return -1;
-        });*/
-    }
-
-
-    public void sortByPercentage(){
-        super.sortByPercentage();
-        /*Collections.sort(list, (o1, o2) -> {
-            if(o1.getPercentageOff() > o2.getPercentageOff())
-                return -1;
-            else if(o1.getPercentageOff() == o2.getPercentageOff())
-                return 0;
-            return 1;
-        });*/
-    }
 
 
 }

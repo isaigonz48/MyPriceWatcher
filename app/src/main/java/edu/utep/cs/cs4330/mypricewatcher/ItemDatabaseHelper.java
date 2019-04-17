@@ -1,3 +1,16 @@
+/**
+ **   @author Isai Gonzalez
+ **  CS 4350: Mobile Application Development
+ **   @date April 17, 2019
+ **
+ **   My Price Watcher
+ **
+ **   This ItemDatabaseHelper class is the class that will help my app use a SQLiteDatabase. The
+ **   database is created in this class. This class also provides an add, remove, and update methods
+ **   for items. There is also a method, allItems, that returns all the items currently in the
+ **   database.
+ **/
+
 package edu.utep.cs.cs4330.mypricewatcher;
 
 import android.content.ContentValues;
@@ -40,6 +53,14 @@ public class ItemDatabaseHelper extends SQLiteOpenHelper {
             onCreate(database);
         }
 
+    /**
+     * Adds an item to the database.
+     * @param name Name of the item
+     * @param initialPrice Initial price of the item
+     * @param currentPrice Current price of the item
+     * @param url Url of the item
+     * @return A DatabaseItem made from the item added. This returned value will include the id.
+     */
         public DatabaseItem addItem(String name, double initialPrice, double currentPrice, String url){
             DatabaseItem item;
 
@@ -62,7 +83,11 @@ public class ItemDatabaseHelper extends SQLiteOpenHelper {
             return item;
         }
 
-        public void removeItem(DatabaseItem item){
+    /**
+     * Remove the given item from the database. Done by using the item's id.
+     * @param item Item to remove
+     */
+    public void removeItem(DatabaseItem item){
             SQLiteDatabase db = this.getWritableDatabase();
             db.delete(ITEM_TABLE,
                     KEY_ID + " = ?",
@@ -70,7 +95,11 @@ public class ItemDatabaseHelper extends SQLiteOpenHelper {
             db.close();
         }
 
-        public void updateItem(DatabaseItem item){
+    /**
+     * Update the item values in the database.
+     * @param item
+     */
+    public void updateItem(DatabaseItem item){
             SQLiteDatabase db = this.getWritableDatabase();
 
             ContentValues values = new ContentValues();
@@ -85,7 +114,12 @@ public class ItemDatabaseHelper extends SQLiteOpenHelper {
                     new String[] {Long.toString(item.getId())});
             db.close();
         }
-        public ArrayList<Item> allItems(){
+
+    /**
+     * Get all items currently in the database and return them as an ItemList.
+     * @return A list of items
+     */
+    public ArrayList<Item> allItems(){
             ArrayList<Item> itemList = new ArrayList<>();
             String selectQuery = "SELECT * FROM " + ITEM_TABLE;
             SQLiteDatabase db = this.getReadableDatabase();

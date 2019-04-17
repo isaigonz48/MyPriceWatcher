@@ -1,7 +1,7 @@
 /**
  **   @author Isai Gonzalez
  **  CS 4350: Mobile Application Development
- **   @date March 24, 2019
+ **   @date April 17, 2019
  **
  **   My Price Watcher
  **
@@ -33,14 +33,24 @@ public class Item {
         this.URL = "https://www.amazon.com/Cedar-Heavy-Commercial-Broom-Handle/dp/B0106FW42U/ref=sr_1_8_a_it?ie=UTF8&qid=1550354047&sr=8-8&keywords=broom&th=1";
     }
 
+    /**
+     * Constructor that receives the name and url of the item. Price will now be found using a PriceFinder.
+     * @param n name of the item
+     * @param url url of the item
+     */
     public Item(String n, String url){
         this.name = n;
         this.URL = url;
 
         PriceFinder finder = new PriceFinder();
+
         initialPrice = finder.findPrice(URL);
+        if(initialPrice < 0){
+            initialPrice = Double.POSITIVE_INFINITY;
+        }
         currentPrice = initialPrice;
-        setPercentageOff();
+        percentageOff = Double.POSITIVE_INFINITY;
+
     }
     /**
      * Constructor that receives the name, initial price, and url of the item. Automatically calculates percentage off.
@@ -83,6 +93,10 @@ public class Item {
     public void setName(String newName){
         this.name = newName;
     }
+
+    public void setInitPrice(double newPrice){
+        this.initialPrice = newPrice;
+    }
     public void setCurPrice(double newPrice){
         this.currentPrice = newPrice;
     }
@@ -102,13 +116,16 @@ public class Item {
     }
 
     /**
-     * Find the current price of the item. For this version of the app, it is only a simulated
-     * price.
+     * Find the current price of the item. Uses a PriceFinder to get the price. If the given price
+     * was less than 0, then no price was found, in which case, no new price is set.
      */
     public void findNewPrice(){
-        //currentPrice = PriceFinder.simulatePrice(this.initialPrice);
         PriceFinder finder = new PriceFinder();
-        currentPrice = finder.findPrice(URL);
-        setPercentageOff();
+        double newPrice = finder.findPrice(URL);
+        if(newPrice >= 0){
+            currentPrice = newPrice;
+            setPercentageOff();
+        }
+
     }
 }

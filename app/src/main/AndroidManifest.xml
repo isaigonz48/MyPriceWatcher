@@ -30,7 +30,6 @@
             </intent-filter>
 
         </activity>
-        <activity android:name=".DetailedItemActivity" />
         <activity android:name=".AddEditItemActivity"/>
     </application>
 

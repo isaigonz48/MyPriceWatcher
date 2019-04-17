@@ -14,6 +14,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:text="@string/broom"
+        android:textStyle="bold"
         android:textSize="24sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -25,10 +26,12 @@
         android:layout_height="wrap_content"
         android:layout_gravity="right"
         android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
         android:text="Current Price: 20"
-        android:textSize="14sp"
-        app:layout_constraintBottom_toBottomOf="@+id/initPrice"
-        app:layout_constraintStart_toEndOf="@+id/percentageOff" />
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="@+id/percentageOff"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/itemName" />
 
     <TextView
         android:id="@+id/initPrice"
@@ -38,9 +41,9 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:text="Initial Price: 30"
-        android:textSize="14sp"
+        android:textSize="18sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/itemName" />
+        app:layout_constraintTop_toBottomOf="@+id/percentageOff" />
 
     <TextView
         android:id="@+id/percentageOff"
@@ -48,24 +51,36 @@
         android:layout_height="wrap_content"
         android:layout_gravity="right"
         android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
         android:text="0.00 off!"
-        android:textSize="14sp"
-        app:layout_constraintBottom_toBottomOf="@+id/curPrice"
-        app:layout_constraintStart_toEndOf="@+id/initPrice" />
+        android:textSize="18sp"
+        app:layout_constraintStart_toEndOf="@+id/curPrice"
+        app:layout_constraintTop_toBottomOf="@+id/itemName" />
 
     <ImageButton
         android:id="@+id/itemMenuButton"
-        android:layout_width="40dp"
-        android:layout_height="64dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp"
+        android:layout_width="64dp"
+        android:layout_height="40dp"
         android:adjustViewBounds="true"
         android:background="@android:color/transparent"
         android:scaleType="fitCenter"
-        app:layout_constraintBottom_toBottomOf="@+id/curPrice"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/itemName"
         app:srcCompat="@drawable/ic_item_menu" />
+
+    <ImageButton
+        android:id="@+id/itemRefreshButton"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:background="@android:color/transparent"
+        android:scaleType="fitCenter"
+        app:layout_constraintBottom_toBottomOf="@+id/initPrice"
+        app:layout_constraintEnd_toEndOf="@+id/itemMenuButton"
+        app:layout_constraintStart_toStartOf="@+id/itemMenuButton"
+        app:layout_constraintTop_toBottomOf="@+id/itemMenuButton"
+        app:srcCompat="@drawable/ic_item_refresh" />
 
 
 </android.support.constraint.ConstraintLayout>

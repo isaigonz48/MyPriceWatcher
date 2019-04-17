@@ -4,46 +4,46 @@
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
-    <LinearLayout
+  <LinearLayout
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:orientation="horizontal"
+      android:layout_gravity="right">
+
+    <Button
+        android:id="@+id/sortButton"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_gravity="right">
+        android:layout_height="40dp"
+        android:text="Sort" />
 
-        <Button
-            android:id="@+id/sortButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Sort" />
-
-        <Button
-            android:id="@+id/addButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="0dp"
-            android:layout_marginEnd="8dp"
-            android:text="@string/AddItem"
-            />
-
-        <Button
-            android:id="@+id/refreshButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="0dp"
-            android:layout_marginEnd="8dp"
-            android:text="@string/refresh"
-             />
-    </LinearLayout>
-
-
-
-    <ListView
-        android:id="@+id/itemList"
-        android:layout_width="395dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
+    <Button
+        android:id="@+id/addButton"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:layout_marginTop="0dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginBottom="8dp" />
+        android:text="@string/AddItem"
+        />
+
+    <Button
+        android:id="@+id/refreshButton"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:layout_marginTop="0dp"
+        android:layout_marginEnd="8dp"
+        android:text="@string/refresh_all"
+        />
+  </LinearLayout>
+
+
+
+  <ListView
+      android:id="@+id/itemList"
+      android:layout_width="395dp"
+      android:layout_height="wrap_content"
+      android:layout_marginStart="8dp"
+      android:layout_marginTop="8dp"
+      android:layout_marginEnd="8dp"
+      android:layout_marginBottom="8dp" />
 
 </LinearLayout>
